@@ -1,0 +1,50 @@
+::-webkit-scrollbar {
+    width: 5px;
+
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f4f5fa;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2E2E2E;
+    border-radius: 32px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2E2E2E;
+}
+
+.css-13cymwt-control,
+.css-t3ipsp-control {
+    background: #f4f4f4 !important;
+    border: none !important;
+    padding: 5px !important;
+    outline: none;
+}
+
+.inner .css-13cymwt-control,
+.inner .css-t3ipsp-control {
+    background: white !important;
+    border: none !important;
+    padding: 5px !important;
+    outline: none;
+}
+
+.pac-container {
+    background-color: #ffffff;
+    border: 1px solid #d4d4d4;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    z-index: 9999 !important;
+    position: relative;
+}
+
+.pac-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.pac-item:hover {
+    background-color: #f0f0f0;
+}
