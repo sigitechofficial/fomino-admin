@@ -65,8 +65,8 @@ const TableBooking = () => {
       header: "Order Status",
     },
     {
-      field: "viewDetails",
-      header: "View Details",
+      field: "action",
+      header: "Action",
     },
   ];
 
@@ -111,7 +111,7 @@ const TableBooking = () => {
           Scheduled
         </div>
       ),
-      viewDetails: <div className='border-gray-300 border-[1px] px-4 py-1 font-semibold rounded-md inline-block cursor-pointer' onClick={()=>navigate("/booking-details",{state:{id: item?.id}})} >Detail</div>
+      action: <div className='border-gray-300 border-[1px] px-4 py-1 font-semibold rounded-md inline-block cursor-pointer' onClick={()=>navigate("/booking-details",{state:{id: item?.id}})} >View Details</div>
     }
   })
 
