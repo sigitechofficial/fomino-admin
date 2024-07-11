@@ -1049,6 +1049,7 @@ export default function EditRestaurants() {
                           </h2>
                           <Helment
                             search={true}
+                            csvdata={datas}
                             searchOnChange={(e) =>
                               handleSearchChange(
                                 categoryData.header,

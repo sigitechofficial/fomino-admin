@@ -172,6 +172,7 @@ export default function CancelledOrders() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
+                  csvdata={datas}
                 />
               </div>
             </div>

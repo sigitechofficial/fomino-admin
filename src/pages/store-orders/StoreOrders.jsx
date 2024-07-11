@@ -154,6 +154,7 @@ export default function AllOrders() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
+                  csvdata={datas}
                 />
               </div>
             </div>

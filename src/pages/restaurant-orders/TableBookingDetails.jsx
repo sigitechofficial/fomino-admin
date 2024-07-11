@@ -24,7 +24,7 @@ export default function tableBookingDetails() {
       }
     };
     getDetails();
-  }, [orderId]);
+  }, []);
 
   return data?.length === 0 ? (
     <Loader />

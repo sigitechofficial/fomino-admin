@@ -11,12 +11,13 @@ export default function OrderDetails() {
   const location = useLocation();
   const orderId = location?.state?.id;
   const [data, setData] = useState("");
-
+console.log(orderId)
   useEffect(() => {
     const getDetails = async () => {
       const res = await PostAPI("admin/orderdetailbyid", {
         orderId: orderId,
       });
+  
       if (res?.data?.status === "1") {
         setData(res?.data?.data);
       } else {
@@ -24,7 +25,8 @@ export default function OrderDetails() {
       }
     };
     getDetails();
-  }, [orderId]);
+  }, []);
+ 
 
   return data?.length === 0 ? (
     <Loader />
@@ -222,7 +224,7 @@ export default function OrderDetails() {
                       {/* {data?.orderCharge?.serviceCharges
                         ? `${data?.restaurant?.currencyUnitID?.symbol}${data?.orderCharge?.serviceCharges}`
                         : "N/A"} */}
-                        ${data.subTotal}
+                       {` ${data?.restaurant?.currencyUnitID?.symbol}${data?.subTotal}`}
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-2">

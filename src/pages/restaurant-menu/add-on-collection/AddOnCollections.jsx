@@ -18,9 +18,11 @@ import GetAPI from "../../../utilities/GetAPI";
 import Loader from "../../../components/Loader";
 import Switch from "react-switch";
 import { PutAPI } from "../../../utilities/PutAPI";
+import { success_toaster } from "../../../utilities/Toaster";
 
 export default function AddOnCollections() {
-  const { data } = GetAPI("admin/addOnCategoryRest");
+  const { data, reFetch } = GetAPI("admin/addOnCategoryRest");
+  console.log("🚀 ~ AddOnCollections ~ data:", data)
   const [modal, setModal] = useState(false);
   const [search, setSearch] = useState("");
   const addOnCollectionData = () => {
@@ -44,16 +46,16 @@ export default function AddOnCollections() {
     const stat = {
       status: status ? false : true,
     }
-    console.log(stat.status)
+    console.log(status)
     if (status === true) {
-      let res = await PutAPI(`admin/statusaddoncat/${userId}`,stat);
+      let res = await PutAPI(`admin/statusaddoncat/${userId}`, stat);
       console.log(res, "checking status")
-      // if (res?.data?.status === "1") {
-      //   success_toaster(res?.data?.message);
-      //   reFetch();
-      // } else {
-      //   error_toaster(res?.data?.message);
-      // }
+      if (res?.data?.status === "1") {
+        success_toaster(res?.data?.message);
+        reFetch();
+      } else {
+        error_toaster(res?.data?.message);
+      }
     } else {
       let res = await PutAPI(`admin/statusaddoncat/${userId}`, stat);
       console.log(res, "checking")
@@ -160,6 +162,7 @@ export default function AddOnCollections() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
+                  csvdata={datas}
                 />
                 <div className="flex gap-2">
                   {/* <BlackButton text="Roles & Permissions" /> */}

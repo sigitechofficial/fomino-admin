@@ -7,6 +7,7 @@ import { DonutChart } from "../../components/DonutChart";
 
 export default function Home() {
   const { data } = GetAPI("admin/statsadmin");
+  console.log(data)
 
   const homeChartData = {
     labels: ["Preparing Orders", "Ready for Pick Up", "Order Placed"],

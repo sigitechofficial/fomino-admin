@@ -129,6 +129,7 @@ export default function StoreAddOn() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
+                  csvdata={datas}
                 />
                 <div className="flex gap-2">
                   {/* <RedButton text="Add New Add on" onClick={openModal} /> */}

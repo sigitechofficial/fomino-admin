@@ -1042,6 +1042,7 @@ export default function EditStore() {
                           </h2>
                           <Helment
                             search={true}
+                            csvdata={categoryData?.data}
                             searchOnChange={(e) =>
                               handleSearchChange(
                                 categoryData.header,

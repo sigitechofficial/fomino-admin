@@ -325,6 +325,7 @@ export default function Voucher() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
+                  csvdata={datas}
                 />
                 <div className="flex gap-2">
                   <RedButton
