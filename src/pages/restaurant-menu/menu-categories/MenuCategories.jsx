@@ -15,13 +15,15 @@ import {
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import GetAPI from "../../../utilities/GetAPI";
+import { PutAPI } from "../../../utilities/PutAPI";
 import Loader from "../../../components/Loader";
 import { BASE_URL } from "../../../utilities/URL";
 import dayjs from "dayjs";
 import Switch from "react-switch";
+import { toast } from "react-toastify";
 
 export default function MenuCategories() {
-  const { data } = GetAPI("admin/allMenuCategoriesStore");
+  const { data, reFetch } = GetAPI("admin/getmenucategory");
   console.log("🚀 ~ MenuCategories ~ data:", data)
   const [modal, setModal] = useState(false);
   const [search, setSearch] = useState("");
@@ -36,7 +38,20 @@ export default function MenuCategories() {
     });
     return filteredData;
   };
-
+  const handleStatus = async (id, status) => {
+    const dets = {
+      id: id,
+      status: status ? false : true,
+    }
+      let res = await PutAPI("admin/changestatusmenucategory", dets);
+      console.log(dets)
+      if (res.data.status === "1") {
+        toast.success(res.data.message);
+        reFetch("admin/getmenucategory")
+      }
+     
+    
+  }
   const openModal = () => {
     setModal(true);
   };
@@ -48,10 +63,10 @@ export default function MenuCategories() {
       field: "name",
       header: "Name",
     },
-    // {
-    //   field: "image",
-    //   header: "Image",
-    // },
+    {
+      field: "image",
+      header: "Image",
+    },
     {
       field: "createdAt",
       header: "Created At",
@@ -76,15 +91,15 @@ export default function MenuCategories() {
       sn: index + 1,
       id: values?.id,
       name: values?.name,
-      // image: (
-      //   <div>
-      //     <img
-      //       src={`${BASE_URL}${values?.image}`}
-      //       alt="image"
-      //       className="w-24 h-24"
-      //     />
-      //   </div>
-      // ),
+      image: (
+        <div>
+          <img
+            src={`${BASE_URL}${values?.image}`}
+            alt="image"
+            className="w-24 h-24"
+          />
+        </div>
+      ),
       createdAt: dayjs(values?.createdAt).format("DD-MM-YYYY h:mm:ss A"),
       updatedAt: dayjs(values?.updatedAt).format("DD-MM-YYYY h:mm:ss A"),
       status: (
@@ -111,7 +126,7 @@ export default function MenuCategories() {
           <label>
             <Switch
               onChange={() => {
-                handleStatus(values?.id);
+                handleStatus(values?.id, values?.status);
               }}
               checked={values?.status}
               uncheckedIcon={false}

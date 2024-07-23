@@ -5,10 +5,12 @@ import MyDataTable from "../../components/MyDataTable";
 import Loader from "../../components/Loader";
 import GetAPI from "../../utilities/GetAPI";
 import { EditButton } from "../../utilities/Buttons";
+import { useNavigate } from "react-router-dom";
 
 export default function AllOrders() {
   const { data } = GetAPI("admin/storeAllOrders");
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   const orderData = () => {
     const filteredData = data?.data?.orders?.filter((dat) => {
@@ -19,6 +21,10 @@ export default function AllOrders() {
       );
     });
     return filteredData;
+  };
+
+  const viewDetails = (orderId) => {
+    navigate("/store/order-details", localStorage.setItem("orderId", orderId));
   };
 
   const columns = [
@@ -115,6 +121,20 @@ export default function AllOrders() {
               justify-center"
             >
               Rejected
+            </div>
+          ) : values?.orderStatus?.name === "Placed" ? (
+            <div
+              className="bg-[#faff7533] text-yellow-400 font-semibold p-2 rounded-md flex 
+              justify-center"
+            >
+              Placed
+            </div>
+          ) : values?.orderStatus?.name === "Preparing" ? (
+            <div
+              className="bg-[#75caff33] text-[#75caff] font-semibold p-2 rounded-md flex 
+              justify-center"
+            >
+              Preparing
             </div>
           ) : (
             <div

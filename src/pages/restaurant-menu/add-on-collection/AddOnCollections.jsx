@@ -15,16 +15,18 @@ import {
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import GetAPI from "../../../utilities/GetAPI";
+import { PutAPI } from "../../../utilities/PutAPI";
 import Loader from "../../../components/Loader";
 import Switch from "react-switch";
-import { PutAPI } from "../../../utilities/PutAPI";
-import { success_toaster } from "../../../utilities/Toaster";
+import { toast } from "react-toastify";
 
 export default function AddOnCollections() {
   const { data, reFetch } = GetAPI("admin/addOnCategoryRest");
-  console.log("🚀 ~ AddOnCollections ~ data:", data)
   const [modal, setModal] = useState(false);
   const [search, setSearch] = useState("");
+
+
+
   const addOnCollectionData = () => {
     const filteredData = data?.data?.list?.filter((dat) => {
       return (
@@ -39,34 +41,21 @@ export default function AddOnCollections() {
     return filteredData;
   };
 
-  const openModal = () => {
-    setModal(true);
-  };
-  const handleStatus = async (userId, status) => {
-    const stat = {
+  const handleStatus = async(id, status) => {
+    const details = {
+      id: id,
       status: status ? false : true,
     }
-    console.log(status)
-    if (status === true) {
-      let res = await PutAPI(`admin/statusaddoncat/${userId}`, stat);
-      console.log(res, "checking status")
-      if (res?.data?.status === "1") {
-        success_toaster(res?.data?.message);
-        reFetch();
-      } else {
-        error_toaster(res?.data?.message);
-      }
-    } else {
-      let res = await PutAPI(`admin/statusaddoncat/${userId}`, stat);
-      console.log(res, "checking")
-      if (res?.data?.status === "1") {
-        success_toaster(res?.data?.message);
-        reFetch();
-      } else {
-        error_toaster(res?.data?.message);
-      }
+    const res = await PutAPI("admin/changeCollectionStatus", details);
+    if(res.data.status==="1"){
+      reFetch("admin/addOnCategoryRest")
+      toast.success(res.data.message)
+   
+    }else{
+      toast.error(res.data.message)
     }
-  };
+  }
+
 
   const columns = [
     { field: "sn", header: "Serial. No" },
@@ -98,6 +87,7 @@ export default function AddOnCollections() {
 
   const datas = [];
   addOnCollectionData()?.map((values, index) => {
+  
     return datas.push({
       sn: index + 1,
       name: values?.title,
@@ -125,10 +115,11 @@ export default function AddOnCollections() {
       ),
       action: (
         <div className="flex items-center gap-3">
+          
           <label>
             <Switch
               onChange={() => {
-                handleStatus(values?.id, values?.status);
+                handleStatus(values?.id, values.status);
               }}
               checked={values?.status}
               uncheckedIcon={false}

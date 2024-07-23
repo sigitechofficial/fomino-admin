@@ -15,11 +15,13 @@ import {
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import GetAPI from "../../../utilities/GetAPI";
+import { PostAPI } from "../../../utilities/PostAPI";
 import Loader from "../../../components/Loader";
 import Switch from "react-switch";
+import { toast } from "react-toastify";
 
 export default function AddOn() {
-  const { data } = GetAPI("admin/restAddOns");
+  const { data,reFetch } = GetAPI("admin/restAddOns");
   const [modal, setModal] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -37,6 +39,17 @@ export default function AddOn() {
   const openModal = () => {
     setModal(true);
   };
+  const handleStatus = async (id, status) => {
+    const details = {
+      id: id,
+      status: status ? false : true,
+    }
+    const res = await PostAPI("admin/changeStatusAddon", details)
+    if(res?.data?.status==="1"){
+      reFetch("admin/restAddOns");
+      toast.success(res.data.message);
+    }
+  }
 
   const columns = [
     { field: "sn", header: "Serial. No" },
@@ -95,7 +108,7 @@ export default function AddOn() {
           <label>
             <Switch
               onChange={() => {
-                handleStatus(values?.id);
+                handleStatus(values?.id, values?.status);
               }}
               checked={values?.status}
               uncheckedIcon={false}
@@ -104,10 +117,11 @@ export default function AddOn() {
               onHandleColor="#fff"
               className="react-switch"
               boxShadow="none"
+
             />
           </label>
 
-          <EditButton text="View Details" />
+          {/* <EditButton text="View Details" /> */}
         </div>
       ),
     });
@@ -131,9 +145,9 @@ export default function AddOn() {
                   searchValue={search}
                   csvdata={datas}
                 />
-                <div className="flex gap-2">
+                {/* <div className="flex gap-2">
                   <RedButton text="Add New Add on" onClick={openModal} />
-                </div>
+                </div> */}
               </div>
             </div>
 

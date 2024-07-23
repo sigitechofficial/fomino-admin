@@ -20,6 +20,7 @@ import Switch from "react-switch";
 
 export default function StoreAddOn() {
   const { data } = GetAPI("admin/storeAddOns");
+  console.log(data)
   const [modal, setModal] = useState(false);
   const [search, setSearch] = useState("");
 

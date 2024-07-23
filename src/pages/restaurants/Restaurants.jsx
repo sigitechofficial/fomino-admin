@@ -187,14 +187,14 @@ export default function Restaurants() {
                   searchValue={search}
                   csvdata={datas}
                 />
-                {/* <div className="flex gap-2">
+                <div className="flex gap-2">
                   <RedButton
                     text="Add New Restaurants"
-                    // onClick={() => {
-                    //   navigate("/add-restaurant");
-                    // }}
+                    onClick={() => {
+                      navigate("/add-restaurant");
+                    }}
                   />
-                </div> */}
+                </div>
               </div>
             </div>
 

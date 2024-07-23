@@ -29,6 +29,7 @@ import {
   RiCouponLine,
   RiMoneyDollarBoxLine,
   RiUserSettingsFill,
+  RiAddFill 
 } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ListHead from "./ListHead";
@@ -59,7 +60,7 @@ export default function SideBar() {
     } else if (
       location.includes("/restaurant/add-on-collections") ||
       location.includes("/restaurant/menu-categories") ||
-      // location.includes("/restaurant/add-on") ||
+      location.includes("/restaurant/add-on") ||
       location.includes("/restaurant/products") ||
       location.includes("/restaurant/cuisines")
     ) {
@@ -67,7 +68,7 @@ export default function SideBar() {
     } else if (
       location.includes("/store/add-on-collections") ||
       location.includes("/store/menu-categories") ||
-      // location.includes("/store/add-on") ||
+      location.includes("/store/add-on") ||
       location.includes("/store/products") ||
       location.includes("/store/cuisines")
     ) {
@@ -247,11 +248,11 @@ export default function SideBar() {
                 to="/restaurant/add-on-collections"
                 Icon={MdAddBox}
               />
-              {/* <ListItems
+              <ListItems
                 title="Add On"
                 to="/restaurant/add-on"
                 Icon={RiAddFill}
-              /> */}
+              />
               <ListItems
                 title="Menu Categories"
                 to="/restaurant/menu-categories"
@@ -277,7 +278,7 @@ export default function SideBar() {
           Icon={IoStorefront}
           active={
             location === "/store/add-on-collections" ||
-            // location === "/store/add-on" ||
+            location === "/store/add-on" ||
             location === "/store/menu-categories" ||
             location === "/store/cuisines" ||
             location === "/store/products"
@@ -295,7 +296,7 @@ export default function SideBar() {
                 to="/store/add-on-collections"
                 Icon={MdAddBox}
               />
-              {/* <ListItems title="Add On" to="/store/add-on" Icon={RiAddFill} /> */}
+              <ListItems title="Add On" to="/store/add-on" Icon={RiAddFill} />
               <ListItems
                 title="Menu Categories"
                 to="/store/menu-categories"
@@ -354,6 +355,11 @@ export default function SideBar() {
                 to="/restaurant/schedule-orders"
                 Icon={IoIosCheckbox}
               />
+               <ListItems
+                title="Rejected"
+                to="/restaurant/rejected"
+                Icon={MdCancel}
+              />
                 <ListItems
                 title="Table Bookings"
                 to="/restaurant/table-booking"
@@ -405,11 +411,11 @@ export default function SideBar() {
                 to="/store/schedule-orders"
                 Icon={IoIosCheckbox}
               />
-              {/* <ListItems
-                title="Rejected by Store"
-                to="/completed-rides"
+              <ListItems
+                title="Rejected"
+                to="/store-rejected"
                 Icon={MdCancel}
-              /> */}
+              />
               <hr className="w-full" />
             </div>
           </>

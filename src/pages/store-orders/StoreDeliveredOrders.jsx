@@ -6,10 +6,12 @@ import Loader from "../../components/Loader";
 import GetAPI from "../../utilities/GetAPI";
 import { EditButton } from "../../utilities/Buttons";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 export default function StoreDeliveredOrders() {
   const { data } = GetAPI("admin/storeAllDeliveredOrders");
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   const orderData = () => {
     const filteredData = data?.data?.orders?.filter((dat) => {
@@ -20,6 +22,10 @@ export default function StoreDeliveredOrders() {
       );
     });
     return filteredData;
+  };
+
+  const viewDetails = (orderId) => {
+    navigate("/store/order-details", localStorage.setItem("orderId", orderId));
   };
 
   const columns = [
@@ -116,6 +122,20 @@ export default function StoreDeliveredOrders() {
               justify-center"
             >
               Rejected
+            </div>
+          ) : values?.orderStatus?.name === "Placed" ? (
+            <div
+              className="bg-[#faff7533] text-yellow-400 font-semibold p-2 rounded-md flex 
+              justify-center"
+            >
+              Placed
+            </div>
+          ) : values?.orderStatus?.name === "Preparing" ? (
+            <div
+              className="bg-[#75caff33] text-[#75caff] font-semibold p-2 rounded-md flex 
+              justify-center"
+            >
+              Preparing
             </div>
           ) : (
             <div

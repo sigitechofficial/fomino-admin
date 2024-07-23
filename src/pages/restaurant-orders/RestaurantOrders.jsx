@@ -11,13 +11,12 @@ export default function RestaurantOrders() {
   const { data } = GetAPI("admin/restAllOrders");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-
+console.log(data, "order details")
   const viewDetails = (orderId) => {
-    navigate("/order-details", {
-      state: {
-        id: orderId,
-      },
-    });
+    navigate(
+      "/restaurant/order-details",
+      localStorage.setItem("orderId", orderId)
+    );
   };
 
   const orderData = () => {
@@ -94,7 +93,7 @@ export default function RestaurantOrders() {
       header: "Action",
     },
   ];
-  
+
   const datas = [];
   orderData()?.map((values, index) => {
     return datas.push({
@@ -133,6 +132,20 @@ export default function RestaurantOrders() {
               justify-center"
             >
               Rejected
+            </div>
+          ) : values?.orderStatus?.name === "Placed" ? (
+            <div
+              className="bg-[#faff7533] text-yellow-400 font-semibold p-2 rounded-md flex 
+              justify-center"
+            >
+              Placed
+            </div>
+          ) : values?.orderStatus?.name === "Preparing" ? (
+            <div
+              className="bg-[#75caff33] text-[#75caff] font-semibold p-2 rounded-md flex 
+              justify-center"
+            >
+              Preparing
             </div>
           ) : (
             <div

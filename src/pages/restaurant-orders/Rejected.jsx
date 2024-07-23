@@ -7,8 +7,8 @@ import GetAPI from "../../utilities/GetAPI";
 import { EditButton } from "../../utilities/Buttons";
 import { useNavigate } from "react-router-dom";
 
-export default function ScheduleOrders() {
-  const { data } = GetAPI("admin/restAllScheduleOrders");
+const Rejected = () => {
+  const { data } = GetAPI("admin/restAllRejectedOrders");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
@@ -177,7 +177,7 @@ export default function ScheduleOrders() {
           <div className="bg-white rounded-lg p-5">
             <div className="flex justify-between items-center flex-wrap gap-5">
               <h2 className="text-themeRed text-lg font-bold font-norms">
-                All Schedule Orders
+                All Rejected Orders
               </h2>
               <div>
                 <Helment
@@ -198,3 +198,6 @@ export default function ScheduleOrders() {
     />
   );
 }
+
+export default Rejected;
+

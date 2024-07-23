@@ -522,6 +522,7 @@ export default function DriverDetails() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
+                  csvdata={datas}
                 />
                 <MyDataTable columns={columns} data={datas} />
               </div>

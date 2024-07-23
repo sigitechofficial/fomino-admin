@@ -127,6 +127,8 @@ export default function Voucher() {
       info_toaster("Please Select Voucher Start Date");
     } else if (addVoucher?.to === "") {
       info_toaster("Please Select Voucher End Date");
+    }else if (addVoucher?.from > addVoucher?.to) {
+      info_toaster("Please Select Correct Date");
     } else {
       setLoader(true);
       const res = await PostAPI("admin/addvoucher", {
@@ -138,6 +140,7 @@ export default function Voucher() {
         storeApplicable: addVoucher?.storeApplicable,
         conditionalAmount: "2",
       });
+      console.log(res, "ghghjgj")
       if (res?.data?.status === "1") {
         reFetch();
         setLoader(false);
@@ -391,6 +394,7 @@ export default function Voucher() {
                           type="number"
                           name="value"
                           id="value"
+                          maxLength="3"
                           className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
                           onChange={handleOnChange}
                         />
@@ -405,7 +409,6 @@ export default function Voucher() {
                         </label>
                         <Select
                           placeholder="Select"
-                          value={addVoucher?.type}
                           name="type"
                           options={options}
                           onChange={(e) =>
@@ -414,6 +417,7 @@ export default function Voucher() {
                               type: e?.label,
                             })
                           }
+                         
                         />
                       </div>
 

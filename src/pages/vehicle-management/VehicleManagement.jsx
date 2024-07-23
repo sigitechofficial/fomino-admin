@@ -337,6 +337,7 @@ export default function Restaurants() {
                                 color="#00000099"
                               />
                             </div>
+                            
                           )}
                         </label>
 

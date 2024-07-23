@@ -15,13 +15,15 @@ import {
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import GetAPI from "../../../utilities/GetAPI";
+import {PutAPI} from "../../../utilities/PutAPI";
 import Loader from "../../../components/Loader";
 import { BASE_URL } from "../../../utilities/URL";
 import dayjs from "dayjs";
 import Switch from "react-switch";
+import { toast } from "react-toastify";
 
 export default function StoreMenuCategories() {
-  const { data } = GetAPI("admin/getmenucategory");
+  const { data, reFetch } = GetAPI("admin/getmenucategory");
   const [modal, setModal] = useState(false);
   const [search, setSearch] = useState("");
   const menuCategoryData = () => {
@@ -38,6 +40,19 @@ export default function StoreMenuCategories() {
   const openModal = () => {
     setModal(true);
   };
+  const handleStatus = async(status, id) => {
+    let dets = {
+      status: status?false:true,
+      id:id,
+    }
+    let res = await PutAPI("admin/changestatusmenucategory",dets)
+    if(res.data.status==="1"){
+      reFetch("admin/getmenucategory")
+      toast.success(res.data.message)
+    }else{
+      toast.error(res.data.message);
+    }
+  }
 
   const columns = [
     { field: "sn", header: "Serial. No" },
@@ -109,7 +124,7 @@ export default function StoreMenuCategories() {
           <label>
             <Switch
               onChange={() => {
-                handleStatus(values?.id);
+                handleStatus(values?.status,values?.id);
               }}
               checked={values?.status}
               uncheckedIcon={false}

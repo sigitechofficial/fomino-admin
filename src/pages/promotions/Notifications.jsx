@@ -63,10 +63,10 @@ export default function Notifications() {
       info_toaster("Please Add Message");
     } else {
       setLoader(true);
-      const res = await PostAPI("admin/sendingNotification", {
-        to: addNotification?.to,
+      const res = await PostAPI("admin/pushnotifications", {
         title: addNotification?.title,
         body: addNotification?.body,
+        to: addNotification?.to,
       });
       if (res?.data?.status === "1") {
         reFetch();

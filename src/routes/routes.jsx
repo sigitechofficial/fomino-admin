@@ -42,6 +42,7 @@ const Products = lazy(() =>
   import("../pages/restaurant-menu/products/Products")
 );
 
+
 // Store Items & Menu
 const StoreAddOnCollections = lazy(() =>
   import("../pages/store-menu/add-on-collection/StoreAddOnCollection")
@@ -82,7 +83,9 @@ const TableBooking = lazy(() =>
 const TableBookingDetails = lazy(() =>
   import("../pages/restaurant-orders/TableBookingDetails")
 );
-
+const Rejected = lazy(() =>
+  import("../pages/restaurant-orders/Rejected")
+);
 // Store Orders
 const StoreOrders = lazy(() => import("../pages/store-orders/StoreOrders"));
 const StoreDeliveredOrders = lazy(() =>
@@ -93,6 +96,9 @@ const StoreCancelledOrders = lazy(() =>
 );
 const StoreScheduleOrders = lazy(() =>
   import("../pages/store-orders/StoreScheduleOrders")
+);
+const StoreRejected = lazy(() =>
+  import("../pages/store-orders/StoreRejected")
 );
 
 // All Restaurants
@@ -216,10 +222,10 @@ const coreRoutes = [
     path: "/restaurant/add-on-collections",
     component: AddOnCollections,
   },
-  // {
-  //   path: "/restaurant/add-on",
-  //   component: AddOn,
-  // },
+  {
+    path: "/restaurant/add-on",
+    component: AddOn,
+  },
   {
     path: "/restaurant/menu-categories",
     component: MenuCategories,
@@ -238,10 +244,10 @@ const coreRoutes = [
     component: StoreAddOnCollections,
   },
 
-  // {
-  //   path: "/store/add-on",
-  //   component: StoreAddOn,
-  // },
+  {
+    path: "/store/add-on",
+    component: StoreAddOn,
+  },
 
   {
     path: "/store/menu-categories",
@@ -276,6 +282,10 @@ const coreRoutes = [
     component: ScheduleOrders,
   },
   {
+    path: "restaurant/order-details",
+    component: OrderDetails,
+  },
+  {
     path: "/order-details",
     component: OrderDetails,
   },
@@ -287,6 +297,11 @@ const coreRoutes = [
     path: "restaurant/table-booking",
     component: TableBooking,
   },
+  {
+    path: "restaurant/rejected",
+    component: Rejected,
+  },
+
 
   // Store Orders
   {
@@ -309,6 +324,10 @@ const coreRoutes = [
   {
     path: "/vehicle-management",
     component: VehicleManagement,
+  },
+  {
+    path: "/store-rejected",
+    component: StoreRejected,
   },
 
   // All Zones

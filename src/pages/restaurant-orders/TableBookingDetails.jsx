@@ -17,15 +17,18 @@ export default function tableBookingDetails() {
       const res = await PostAPI("admin/orderdetailbyid", {
         orderId: orderId,
       });
+      
       if (res?.data?.status === "1") {
         setData(res?.data?.data);
+      
       } else {
         error_toaster(res?.data?.message);
       }
     };
     getDetails();
+  
   }, []);
-
+  console.log(data, "ceckjij")
   return data?.length === 0 ? (
     <Loader />
   ) : (
@@ -57,32 +60,32 @@ export default function tableBookingDetails() {
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Order Number</div>
                     <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderNum ? data?.orderNum : "N/A"}
+                      {data?.orderDetails?.orderNum ? data?.orderDetails?.orderNum : "N/A"}
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Created At</div>
                     <div className="font-medium text-themeBorderGray text-end">
-                      {data?.createdAt
-                        ? dayjs(data?.createdAt).format("DD-MM-YYYY h:mm:ss A")
+                      {data?.orderDetails?.createdAt
+                        ? dayjs(data?.orderDetails?.createdAt).format("DD-MM-YYYY h:mm:ss A")
                         : "N/A"}
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Order Status</div>
                     <div>
-                      {data?.orderStatus?.name === "Delivered" ? (
+                      {data?.orderDetails.orderStatus?.name === "Delivered" ? (
                         <div className="bg-[#21965314]  text-themeGreen font-semibold p-2 rounded-md flex justify-center">
                           Delivered
                         </div>
-                      ) : data?.orderStatus?.name === "Cancelled" ? (
+                      ) : data?.orderDetails?.orderStatus?.name === "Cancelled" ? (
                         <div
                           className="bg-[#EE4A4A14]  text-themeRed font-semibold p-2 rounded-md 
                           flex justify-center"
                         >
                           Cancelled
                         </div>
-                      ) : data?.orderStatus?.name === "Rejected" ? (
+                      ) : data?.orderDetails?.orderStatus?.name === "Rejected" ? (
                         <div className="bg-[#1860CC33] text-[#1860CC] font-semibold p-2 rounded-md flex justify-center">
                           Rejected
                         </div>
@@ -96,7 +99,7 @@ export default function tableBookingDetails() {
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Order Type</div>
                     <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderType?.type ? data?.orderType?.type : "N/A"}
+                      {data?.orderDetails?.orderType?.type ? data?.orderDetails?.orderType?.type : "N/A"}
                     </div>
                   </div>
                 </div>
@@ -111,28 +114,28 @@ export default function tableBookingDetails() {
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Customer Name</div>
                     <div className="font-medium text-themeBorderGray text-end">
-                      {data?.user?.userName ? data?.user?.userName : "N/A"}
+                      {data?.orderDetails?.user?.userName ? data?.orderDetails?.user?.userName : "N/A"}
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Email</div>
                     <div className="font-medium text-themeBorderGray text-end">
-                      {data?.user?.email ? data?.user?.email : "N/A"}
+                      {data?.orderDetails?.user?.email ? data?.orderDetails?.user?.email : "N/A"}
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Phone #</div>
                     <div className="font-medium text-themeBorderGray text-end">
-                      {`${data?.user?.countryCode}${data?.user?.phoneNum}`
-                        ? `${data?.user?.countryCode}${data?.user?.phoneNum}`
+                      {`${data?.orderDetails?.user?.countryCode}${data?.orderDetails?.user?.phoneNum}`
+                        ? `${data?.orderDetails?.user?.countryCode}${data?.orderDetails?.user?.phoneNum}`
                         : "N/A"}
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Delivery Address</div>
                     <div className="font-medium text-themeBorderGray text-end">
-                      {data?.dropOffID?.streetAddress
-                        ? data?.dropOffID?.streetAddress
+                      {data?.orderDetails?.dropOffID?.streetAddress
+                        ? data?.orderDetails?.dropOffID?.streetAddress
                         : "N/A"}
                     </div>
                   </div>
@@ -148,22 +151,22 @@ export default function tableBookingDetails() {
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Driver Name</div>
                     <div className="font-medium text-themeBorderGray text-end">
-                      {`${data?.DriverId?.firstName}${data?.DriverId?.lastName}`
-                        ? `${data?.DriverId?.firstName} ${data?.DriverId?.lastName}`
+                      {data?.orderDetails?.DriverId?.firstName||data?.orderDetails?.DriverId?.lastName
+                        ? `${data?.orderDetails?.DriverId?.firstName} ${data?.orderDetails?.DriverId?.lastName}`
                         : "N/A"}
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Email</div>
                     <div className="font-medium text-themeBorderGray text-end">
-                      {data?.DriverId?.email ? data?.DriverId?.email : "N/A"}
+                      {data?.orderDetails?.DriverId?.email ? data?.orderDetails?.DriverId?.email : "N/A"}
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-2">
                     <div className="font-medium">Phone #</div>
                     <div className="font-medium text-themeBorderGray text-end">
-                      {`${data?.DriverId?.countryCode}${data?.DriverId?.phoneNum}`
-                        ? `${data?.DriverId?.countryCode}${data?.DriverId?.phoneNum}`
+                      {data?.orderDetails?.DriverId?.countryCode||data?.orderDetails?.DriverId?.phoneNum
+                        ? `${data?.orderDetails?.DriverId?.countryCode}${data?.orderDetails?.DriverId?.phoneNum}`
                         : "N/A"}
                     </div>
                   </div>
