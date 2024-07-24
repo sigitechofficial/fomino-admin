@@ -195,7 +195,7 @@ export default function Permissions() {
                     </div>
                     <div className="flex justify-end gap-2">
                       <BlackButton
-                        text="Cancle"
+                        text="Cancel"
                         onClick={() => {
                           setModal(false);
                         }}
@@ -228,7 +228,7 @@ export default function Permissions() {
                     </div>
                     <div className="flex justify-end gap-2">
                       <BlackButton
-                        text="Cancle"
+                        text="Cancel"
                         onClick={() => {
                           setModal(false);
                         }}

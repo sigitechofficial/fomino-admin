@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Layout from "../../../components/Layout";
-import Helment from "../../../components/Helment";
-import RedButton, { BlackButton, EditButton } from "../../../utilities/Buttons";
-import MyDataTable from "../../../components/MyDataTable";
+import Layout from "../../components/Layout"
+import Helment from "../../components/Helment";
+import RedButton, { BlackButton, EditButton } from "../../utilities/Buttons";
+import MyDataTable from "../../components/MyDataTable";
 import {
   Modal,
   ModalOverlay,
@@ -14,45 +14,62 @@ import {
 } from "@chakra-ui/react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import GetAPI from "../../../utilities/GetAPI";
-import Loader from "../../../components/Loader";
+import GetAPI from "../../utilities/GetAPI";
+import { PutAPI } from "../../utilities/PutAPI";
+import Loader from "../../components/Loader";
 import Switch from "react-switch";
+import { toast } from "react-toastify";
 
-export default function StoreAddOn() {
-  const { data } = GetAPI("admin/storeAddOns");
-  console.log(data)
+export default function Payoutrequest() {
+  const { data, reFetch } = GetAPI("admin/allpayoutrequest");
   const [modal, setModal] = useState(false);
   const [search, setSearch] = useState("");
 
-  const cuisinesData = () => {
-    const filteredData = data?.data?.filter((dat) => {
+console.log(data,"payouts")
+
+  const addOnCollectionData = () => {
+    const filteredData = data?.data?.list?.filter((dat) => {
       return (
         search === "" ||
         (dat?.id && dat?.id.toString().includes(search.toLowerCase())) ||
-        (dat?.name && dat?.name.toLowerCase().includes(search.toLowerCase()))
+        (dat?.restaurant &&
+          dat?.restaurant.toLowerCase().includes(search.toLowerCase())) ||
+        (dat?.title &&
+          dat?.title.toLowerCase().includes(search.toLowerCase()))
       );
     });
     return filteredData;
   };
 
-  const openModal = () => {
-    setModal(true);
-  };
+  const handleStatus = async(id, status) => {
+    const details = {
+      id: id,
+      status: status ? false : true,
+    }
+    const res = await PutAPI("admin/changeCollectionStatus", details);
+    if(res.data.status==="1"){
+      reFetch("admin/addOnCategoryRest")
+      toast.success(res.data.message)
+   
+    }else{
+      toast.error(res.data.message)
+    }
+  }
+
 
   const columns = [
     { field: "sn", header: "Serial. No" },
-    { field: "id", header: "Id" },
     {
-      field: "name",
-      header: "Name",
+      field: "amount",
+      header: "Amount",
     },
     {
-      field: "minAllowed",
-      header: "Minimum Allowed",
+      field: "transactionId",
+      header: "TransactionId",
     },
     {
-      field: "maxAllowed",
-      header: "Maximum Allowed",
+      field: "CreatedAt",
+      header: "CreatedAt",
     },
     {
       field: "status",
@@ -65,12 +82,13 @@ export default function StoreAddOn() {
   ];
 
   const datas = [];
-  cuisinesData()?.map((values, index) => {
+  addOnCollectionData()?.map((values, index) => {
+  
     return datas.push({
       sn: index + 1,
-      id: values?.id,
-      name: values?.name,
-      minAllowed: values?.minAllowed,
+      amount: values?.title,
+      transactionId: values?.restaurant,
+      transactionId: values?.minAllowed,
       maxAllowed: values?.maxAllowed,
       status: (
         <div>
@@ -93,10 +111,11 @@ export default function StoreAddOn() {
       ),
       action: (
         <div className="flex items-center gap-3">
+          
           <label>
             <Switch
               onChange={() => {
-                handleStatus(values?.id);
+                handleStatus(values?.id, values.status);
               }}
               checked={values?.status}
               uncheckedIcon={false}
@@ -123,7 +142,7 @@ export default function StoreAddOn() {
           <div className="bg-white rounded-lg p-5">
             <div className="flex justify-between items-center flex-wrap gap-5">
               <h2 className="text-themeRed text-lg font-bold font-norms">
-                Add on
+               All Pending Payouts
               </h2>
               <div className="flex gap-2 items-center flex-wrap">
                 <Helment
@@ -133,7 +152,8 @@ export default function StoreAddOn() {
                   csvdata={datas}
                 />
                 <div className="flex gap-2">
-                  {/* <RedButton text="Add New Add on" onClick={openModal} /> */}
+                  {/* <BlackButton text="Roles & Permissions" /> */}
+                  {/* <RedButton text="Add Menu Collection" onClick={openModal} /> */}
                 </div>
               </div>
             </div>
@@ -239,7 +259,7 @@ export default function StoreAddOn() {
               <ModalFooter padding={4}>
                 <div className="flex gap-2">
                   <BlackButton
-                    text="Cancel"
+                    text="Cancle"
                     onClick={() => {
                       setModal(false);
                     }}

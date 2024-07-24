@@ -302,7 +302,7 @@ export default function Roles() {
 
                     <div className="flex justify-end gap-2">
                       <BlackButton
-                        text="Cancle"
+                        text="Cancel"
                         onClick={() => {
                           setModal(false);
                         }}
@@ -358,7 +358,7 @@ export default function Roles() {
 
                     <div className="flex justify-end gap-2">
                       <BlackButton
-                        text="Cancle"
+                        text="Cancel"
                         onClick={() => {
                           setModal(false);
                         }}
@@ -418,7 +418,7 @@ export default function Roles() {
 
                     <div className="flex justify-end gap-2">
                       <BlackButton
-                        text="Cancle"
+                        text="Cancel"
                         onClick={() => {
                           setModal(false);
                           setUpdatePermission((prevState) => ({

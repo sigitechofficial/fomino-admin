@@ -241,7 +241,7 @@ export default function StoreAddOnCollections() {
               <ModalFooter padding={4}>
                 <div className="flex gap-2">
                   <BlackButton
-                    text="Cancle"
+                    text="Cancel"
                     onClick={() => {
                       setModal(false);
                     }}

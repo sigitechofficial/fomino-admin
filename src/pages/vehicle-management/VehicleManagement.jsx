@@ -29,6 +29,7 @@ export default function Restaurants() {
   const [loader, setLoader] = useState(false);
   const [search, setSearch] = useState("");
   const [modalType, setModalType] = useState(null);
+
   const [addVehicle, setAddVehicle] = useState({
     name: "",
     image: "",
@@ -38,7 +39,10 @@ export default function Restaurants() {
     name: "",
     image: "",
     id: "",
+    baseRate: "",
+    perUnitRate: "",
   });
+
 
   const vehicleData = () => {
     const filteredData = data?.data?.filter((dat) => {
@@ -51,13 +55,16 @@ export default function Restaurants() {
     return filteredData;
   };
 
-  const openModal = (type, id, name, image) => {
+  const openModal = (type, id, name, image, baseRate, perUnitRate) => {
     setModalType(type);
     setModal(true);
     setUpdateVehicle({
+      ...updateVehicle,
       name: name,
       image: image,
       id: id,
+      baseRate,
+      perUnitRate,
     });
   };
 
@@ -118,7 +125,10 @@ export default function Restaurants() {
     formData.append("name", updateVehicle?.name);
     formData.append("image", updateVehicle?.image);
     formData.append("id", updateVehicle?.id);
+    formData.append("baseRate", updateVehicle?.baseRate);
+    formData.append("perUnitRate", updateVehicle?.perUnitRate);
     let res = await PostAPI("admin/updateVehicleType", formData);
+
     if (res?.data?.status === "1") {
       reFetch();
       setLoader(false);
@@ -231,7 +241,9 @@ export default function Restaurants() {
                 "Update Vehicle",
                 values?.id,
                 values?.name,
-                values?.image
+                values?.image,
+                values?.baseRate,
+                values?.perUnitRate,
               )
             }
           />
@@ -337,7 +349,7 @@ export default function Restaurants() {
                                 color="#00000099"
                               />
                             </div>
-                            
+
                           )}
                         </label>
 
@@ -353,7 +365,7 @@ export default function Restaurants() {
 
                     <div className="flex justify-end gap-2">
                       <BlackButton
-                        text="Cancle"
+                        text="Cancel"
                         onClick={() => {
                           setModal(false);
                         }}
@@ -420,10 +432,55 @@ export default function Restaurants() {
                         />
                       </div>
                     </div>
+                    <div>
+                      <div className="space-y-1">
+                        <label
+                          htmlFor="name"
+                          className="text-black font-switzer font-semibold"
+                        >
+                          Base Rate
+                        </label>
+                        <input
+                          type="number"
+                          name="baseRate"
+                          id="baseRate"
+                          className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
+                          onChange={(e) =>
+                            setUpdateVehicle({
+                              ...updateVehicle,
+                              baseRate: e.target.value,
+                            })
+                          }
+                          value={updateVehicle?.baseRate}
+                        />
+
+                      </div>
+                      <div className="space-y-1">
+                        <label
+                          htmlFor="name"
+                          className="text-black font-switzer font-semibold"
+                        >
+                          Per Unit Rate
+                        </label>
+                        <input
+                          type="number"
+                          name="perUnitRate"
+                          id="perUnitRate"
+                          className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
+                          onChange={(e) =>
+                            setUpdateVehicle({
+                              ...updateVehicle,
+                              perUnitRate: e.target.value,
+                            })
+                          }
+                          value={updateVehicle?.perUnitRate}
+                        />
+                      </div>
+                    </div>
 
                     <div className="flex justify-end gap-2">
                       <BlackButton
-                        text="Cancle"
+                        text="Cancel"
                         onClick={() => {
                           setModal(false);
                         }}

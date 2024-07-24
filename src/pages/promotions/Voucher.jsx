@@ -475,7 +475,7 @@ export default function Voucher() {
 
                     <div className="flex justify-end col-span-2 gap-2">
                       <BlackButton
-                        text="Cancle"
+                        text="Cancel"
                         onClick={() => {
                           setModal(false);
                         }}
@@ -597,7 +597,7 @@ export default function Voucher() {
 
                     <div className="flex justify-end col-span-2 gap-2">
                       <BlackButton
-                        text="Cancle"
+                        text="Cancel"
                         onClick={() => {
                           setModal(false);
                         }}

@@ -23,6 +23,7 @@ import {
   FaUsers,
   FaUserFriends,
   FaCity,
+  FaCogs ,
 } from "react-icons/fa";
 import {
   RiBus2Fill,
@@ -427,7 +428,7 @@ export default function SideBar() {
           active={
             location === "/notifications" ||
             location === "/vouchers" ||
-            location === "/default-values"
+            location === "/charges"
           }
           Angle={isDropdownActive("Promotions") ? FaAngleUp : FaAngleDown}
           onClick={() => handleActive("Promotions")}
@@ -437,8 +438,8 @@ export default function SideBar() {
             <div className="m-2 relative space-y-1">
               <ListItems title="Vouchers" to="/vouchers" Icon={PiTicket} />
               <ListItems
-                title="Default Values"
-                to="/default-values"
+                title="Charges Section"
+                to="/charges"
                 Icon={RiMoneyDollarBoxLine}
               />
               <ListItems
@@ -532,6 +533,11 @@ export default function SideBar() {
           title="Front Settings"
           to="/front-settings"
           Icon={IoSettings}
+        />
+          <ListHead
+          title="Payout Request"
+          to="/payout-request"
+          Icon={FaCogs }
         />
 
         <ListHead

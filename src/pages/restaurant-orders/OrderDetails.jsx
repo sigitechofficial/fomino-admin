@@ -104,7 +104,7 @@ export default function OrderDetails() {
                         <h4 className="font-bold text-xl ">{items?.quantity}x {data?.productList[index]?.name}</h4>
                         <div className="font-medium text-themeBorderGray text-sm mt-2z` w-full" >{data?.productList[index]?.addOnArr?.map((item, idx) => {
                           return(
-                            <div className="flex"><div className="font-bold">{item?.category?.name}</div>: &nbsp; {data?.productList[index]?.addOnArr[idx]?.addons?.map(item => <div>{`${item?.name},`}&nbsp;</div> )}</div>
+                            <div className="flex flex-wrap"><div className="font-bold">{item?.category?.name}</div>: &nbsp; {data?.productList[index]?.addOnArr[idx]?.addons?.map(item => <div>{`${item?.name},`}&nbsp;</div> )}</div>
                           )
                         })}</div>
 

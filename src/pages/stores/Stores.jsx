@@ -219,7 +219,7 @@ export default function Stores() {
             <ModalContent>
               <ModalHeader padding={0}>
                 <div className="border-b-2 border-b-[#0000001F] px-5 py-2.5 text-lg font-norms font-medium">
-                  Add New Employee
+                  Add New Store
                 </div>
               </ModalHeader>
               <ModalCloseButton />
@@ -305,7 +305,7 @@ export default function Stores() {
               <ModalFooter padding={4}>
                 <div className="flex gap-2">
                   <BlackButton
-                    text="Cancle"
+                    text="Cancel"
                     onClick={() => {
                       setModal(false);
                     }}

@@ -130,6 +130,7 @@ const UpdateZone = lazy(() => import("../pages/zones/UpdateZone"));
 // Promotions
 const Voucher = lazy(() => import("../pages/promotions/Voucher"));
 const Notifications = lazy(() => import("../pages/promotions/Notifications"));
+const Charges = lazy(() => import("../pages/promotions/Charges"));
 
 // Earnings
 const AdminEarnings = lazy(() => import("../pages/earnings/AdminEarnings"));
@@ -142,6 +143,10 @@ const StoreEarnings = lazy(() => import("../pages/earnings/StoreEarnings"));
 // Front Settings
 const FrontSettings = lazy(() =>
   import("../pages/front-settings/FrontSetting")
+);
+// Payout Requet
+const PayoutRequest = lazy(() =>
+  import("../pages/payout-request/Payoutrequest")
 );
 
 // Profile Settings
@@ -388,6 +393,10 @@ const coreRoutes = [
     path: "/notifications",
     component: Notifications,
   },
+  {
+    path: "/charges",
+    component: Charges,
+  },
 
   // Earnings
   {
@@ -411,6 +420,11 @@ const coreRoutes = [
   {
     path: "/front-settings",
     component: FrontSettings,
+  },
+  // Payout Request
+  {
+    path: "/payout-request",
+    component: PayoutRequest,
   },
 
   // Profile Settings

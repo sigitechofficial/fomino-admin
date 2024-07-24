@@ -11,6 +11,7 @@ export default function Zones() {
   const { data } = GetAPI("admin/getAllZones");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  console.log(data,"zones")
 
   // const viewDetails = (orderId) => {
   //   navigate("/order-details", {

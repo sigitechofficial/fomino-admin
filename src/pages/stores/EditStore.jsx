@@ -464,8 +464,8 @@ export default function EditStore() {
                   "Meta Data"
                 ) : tab === "Charges Setting" ? (
                   "Charges Setting"
-                ) : tab === "Menu Settings" ? (
-                  "Menu Settings"
+                ) : tab === "Inventory" ? (
+                  "Inventory"
                 ) : tab === "Delivery" ? (
                   "Delivery"
                 ) : tab === "Bank Details" ? (
@@ -499,9 +499,9 @@ export default function EditStore() {
                   onClick={() => setTab("Charges Setting")}
                 />
                 <TabButton
-                  title="Menu Settings"
+                  title="Inventory"
                   tab={tab}
-                  onClick={() => setTab("Menu Settings")}
+                  onClick={() => setTab("Inventory")}
                 />
                 <TabButton
                   title="Bank Details"

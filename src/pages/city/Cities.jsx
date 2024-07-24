@@ -344,7 +344,7 @@ export default function Cities() {
                       className="border-b-2 border-b-[#0000001F] text-black text-lg 
                     font-norms font-medium"
                     >
-                      Add New Country
+                      Add New City
                     </div>
                     <div className="grid grid-cols-1 gap-5">
                       <div className="space-y-1">
@@ -390,7 +390,7 @@ export default function Cities() {
                       </div>
                     </div>
 
-                    <div>
+                    {/* <div>
                       {isLoaded && (
                         <div className="relative space-y-1">
                           <label
@@ -423,7 +423,7 @@ export default function Cities() {
                           </GoogleMap>
                         </div>
                       )}
-                    </div>
+                    </div> */}
 
                     <div className="flex justify-end gap-2">
                       <BlackButton
@@ -433,7 +433,7 @@ export default function Cities() {
                         }}
                       />
 
-                      <RedButton text="Add" onClick={addNewCity} />
+                      <RedButton text="Confirm" onClick={addNewCity} />
                     </div>
                   </div>
                 ) : (
