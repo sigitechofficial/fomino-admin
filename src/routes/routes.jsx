@@ -130,6 +130,7 @@ const UpdateZone = lazy(() => import("../pages/zones/UpdateZone"));
 // Promotions
 const Voucher = lazy(() => import("../pages/promotions/Voucher"));
 const Notifications = lazy(() => import("../pages/promotions/Notifications"));
+const Adyen = lazy(() => import("../pages/Adyen"));
 const Charges = lazy(() => import("../pages/promotions/Charges"));
 
 // Earnings
@@ -160,6 +161,10 @@ const DefaultValues = lazy(() =>
 
 const coreRoutes = [
   // Reports
+  {
+    path: "/adyen",
+    component: Adyen,
+  },
   {
     path: "/store-reports",
     component: StoreReport,

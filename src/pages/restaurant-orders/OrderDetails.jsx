@@ -97,14 +97,14 @@ export default function OrderDetails() {
                   <>
                     <div className="flex gap-3 mt-6">
                       <div className="flex">
-                        <img className="w-[200px] h-[120px] rounded-md object-cover" src={`${BASE_URL}${data?.productList[index]?.image}`} alt="image" />
+                        <img className="w-[200px] h-[120px] rounded-md object-cover shrink-0" src={`${BASE_URL}${data?.productList[index]?.image}`} alt="image" />
 
                       </div>
                       <div className="">
                         <h4 className="font-bold text-xl ">{items?.quantity}x {data?.productList[index]?.name}</h4>
                         <div className="font-medium text-themeBorderGray text-sm mt-2z` w-full" >{data?.productList[index]?.addOnArr?.map((item, idx) => {
-                          return(
-                            <div className="flex flex-wrap"><div className="font-bold">{item?.category?.name}</div>: &nbsp; {data?.productList[index]?.addOnArr[idx]?.addons?.map(item => <div>{`${item?.name},`}&nbsp;</div> )}</div>
+                          return (
+                            <div className="flex flex-wrap"><div className="font-bold">{item?.category?.name}</div>: &nbsp; {data?.productList[index]?.addOnArr[idx]?.addons?.map(item => <div>{`${item?.name},`}&nbsp;</div>)}</div>
                           )
                         })}</div>
 
@@ -123,10 +123,11 @@ export default function OrderDetails() {
                       <p>Subtotal</p>
                       <p>Delivery Fee</p>
                       <p>Service Charge</p>
+                      {data?.orderDetails?.orderCharge?.packingFee === "0" ? "" : <p>Packing Fee</p>}
                     </div>
 
                     <div className="flex flex-col gap-2">
-                      <p>{data?.orderDetails?.orderItems?.length===1 ? <div>{data?.orderDetails?.orderItems?.length} Item</div>:<div>{data?.orderDetails?.orderItems?.length} Items</div>}</p>
+                      <p>{data?.orderDetails?.orderItems?.length === 1 ? <div>{data?.orderDetails?.orderItems?.length} Item</div> : <div>{data?.orderDetails?.orderItems?.length} Items</div>}</p>
                       <p>{""}</p>
                       <p>{""}</p>
                     </div>
@@ -135,6 +136,7 @@ export default function OrderDetails() {
                     <p>{data?.orderDetails?.subTotal ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol} ${data?.orderDetails?.subTotal}` : "N/A"}</p>
                     <p>{data?.orderDetails?.orderCharge?.deliveryFees ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol} ${data?.orderDetails?.orderCharge?.deliveryFees}` : "N/A"}</p>
                     <p>{data?.orderDetails?.orderCharge?.serviceCharges ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol} ${data?.orderDetails?.orderCharge?.serviceCharges}` : "N/A"} </p>
+                    <p>{data?.orderDetails?.orderCharge?.packingFee === "0" ? "" : `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol} ${data?.orderDetails?.orderCharge?.packingFee}`}</p>
                   </div>
                 </div>
 
@@ -175,10 +177,10 @@ export default function OrderDetails() {
                     </div>
                   ))}
                 </div>
-             
 
 
-                <div className="flex justify-between pr-4 mt-10">
+
+                {data?.orderDetails?.DriverId && <div className="flex justify-between pr-4 mt-10">
 
                   <div>
                     <div className="flex flex-col gap-1">
@@ -196,7 +198,7 @@ export default function OrderDetails() {
                   <div>
                     <img className="w-32 h-32 rounded-md object-cover" src="/images/user.jpg" alt="image" />
                   </div>
-                </div>
+                </div>}
 
 
               </div>
@@ -220,304 +222,6 @@ export default function OrderDetails() {
                 <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d196281.2215564226!2d-105.01991837576863!3d39.7644863346684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1721044326339!5m2!1sen!2s" width="100%" height="100%" ></iframe>
               </div>
             </div>
-
-
-
-            {/* <div className="grid grid-cols-2 gap-5">
-              <div className="bg-white shadow-textShadow p-5 space-y-5">
-                <h4 className="text-xl text-themeRed font-medium font-norms">
-                  Order Detail
-                </h4>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Order Number</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.orderNum ? data?.orderDetails?.orderNum : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Created At</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.createdAt
-                        ? dayjs(data?.orderDetails?.createdAt).format("DD-MM-YYYY h:mm:ss A")
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Order Status</div>
-                    <div>
-                      {data?.orderStatus?.name === "Delivered" ? (
-                        <div className="bg-[#21965314]  text-themeGreen font-semibold p-2 rounded-md flex justify-center">
-                          Delivered
-                        </div>
-                      ) : data?.orderDetails?.orderStatus?.name === "Cancelled" ? (
-                        <div
-                          className="bg-[#EE4A4A14] text-themeRed font-semibold p-2 rounded-md 
-                          flex justify-center"
-                        >
-                          Cancelled
-                        </div>
-                      ) : data?.orderDetails?.orderStatus?.name === "Rejected" ? (
-                        <div className="bg-[#1860CC33] text-[#1860CC] font-semibold p-2 rounded-md flex justify-center">
-                          Rejected
-                        </div>
-                      ) : data?.orderDetails?.orderStatus?.name === "Placed" ? (
-                        <div className="bg-[#faff7533] text-yellow-400 font-semibold p-2 rounded-md flex justify-center">
-                          Placed
-                        </div>
-                      ) : data?.orderDetails?.orderStatus?.name === "Preparing" ? (
-                        <div
-                          className="bg-[#75caff33] text-[#75caff] font-semibold p-2 rounded-md flex 
-                          justify-center"
-                        >
-                          Preparing
-                        </div>
-                      ) : (
-                        <div className="bg-[#EC6C3033] text-[#EC6C30] font-semibold p-2 rounded-md flex justify-center">
-                          Scheduled
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Order Type</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.orderType?.type ? data?.orderDetails?.orderType?.type : "N/A"}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white shadow-textShadow p-5 space-y-5">
-                <h4 className="text-xl text-themeRed font-medium font-norms">
-                  Customer Detail
-                </h4>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Customer Name</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.user?.userName ? data?.orderDetails?.user?.userName : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Email</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.user?.email ? data?.orderDetails?.user?.email : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Phone #</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {`${data?.orderDetails?.user?.countryCode} ${data?.orderDetails?.user?.phoneNum}`
-                        ? `${data?.orderDetails?.user?.countryCode} ${data?.orderDetails?.user?.phoneNum}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Delivery Address</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.dropOffID?.streetAddress
-                        ? data?.orderDetails?.dropOffID?.streetAddress
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white shadow-textShadow p-5 space-y-5">
-                <h4 className="text-xl text-themeRed font-medium font-norms">
-                  Driver Detail
-                </h4>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Driver Name</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.DriverId?.firstName || data?.orderDetails?.DriverId?.lastName
-                        ? `${data?.orderDetails?.DriverId?.firstName} ${data?.orderDetails?.DriverId?.lastName}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Email</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.DriverId?.email ? data?.orderDetails?.DriverId?.email : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Phone #</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.DriverId?.countryCode || data?.orderDetails?.DriverId?.phoneNum
-                        ? `${data?.orderDetails?.DriverId?.countryCode} ${data?.orderDetails?.DriverId?.phoneNum}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white shadow-textShadow p-5 space-y-5">
-                <h4 className="text-xl text-themeRed font-medium font-norms">
-                  Delivery Detail
-                </h4>
-
-                <div className="space-y-2">
-                  <div className="space-y-1">
-                    <div className="font-medium">Pickup Address</div>
-                    <div className="font-medium text-themeBorderGray">
-                      {data?.orderDetails?.restaurant?.address
-                        ? data?.orderDetails?.restaurant?.address
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="font-medium">Delivery Address</div>
-                    <div className="font-medium text-themeBorderGray">
-                      {data?.orderDetails?.dropOffID?.streetAddress
-                        ? data?.orderDetails?.dropOffID?.streetAddress
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white shadow-textShadow p-5 space-y-5">
-                <h4 className="text-xl text-themeRed font-medium font-norms">
-                  Order List
-                </h4>
-
-                <div className="space-y-2">
-                  {data?.productList.map((items, index) => (
-                    <div className="flex justify-between items-center gap-2">
-                      <div className="flex-1 font-medium">{items?.name}</div>
-                      <div className="flex flex-1 justify-center font-medium">
-                        <h4>Quantity:</h4><p className="font-medium text-themeBorderGray">{data?.orderDetails?.orderItems[index]?.quantity}</p>
-                      </div>
-                      <div className="flex-1 font-medium text-themeBorderGray text-end">
-                        {items?.originalPrice
-                          ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol}${items?.originalPrice}`
-                          : "N/A"}
-                      </div>
-                    </div>
-                  ))}
-                  <h4 className="text-xl text-themeRed font-medium font-norms">
-                    AddOns
-                  </h4>
-                
-                  <div className="flex justify-between">
-                    <div>
-                      {data?.productList.map((item, index) => (
-                        <div className="font-medium">{item?.addOnArr?.map((item, index) => { return (<> {item?.category?.name}
-                        </>) })}</div>
-                      ))}
-                    </div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.productList.map((item, index) => (
-                        <div className="font-medium">{item?.addOnArr?item?.addOnArr?.map((item, index) => { return (item?.addons.map(item => item?.name)) }):"N/A"}</div>
-                      ))}
-                    </div>
-                  </div>
-
-
-                  <div className={`w-full bg-black h-[1px]`}></div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">SubTotal</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                     
-                      {data?.orderDetails?.orderCharge?.serviceCharges
-                        ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol}${data?.orderDetails?.subTotal}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Discount</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.orderCharge?.discount
-                        ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol}${data?.orderDetails?.orderCharge?.discount}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Service Charges</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.orderCharge?.serviceCharges
-                        ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol}${data?.orderDetails?.orderCharge?.serviceCharges}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Delivery Charges</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.orderCharge?.deliveryFees
-                        ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol}${data?.orderDetails?.orderCharge?.deliveryFees}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">Admin Delivery Charges</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.orderCharge?.adminDeliveryCharges
-                        ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol}${data?.orderDetails?.orderCharge?.adminDeliveryCharges}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">
-                      Restaurant Delivery Charges
-                    </div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.orderCharge?.restaurantDeliveryCharges
-                        ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol}${data?.orderDetails?.orderCharge?.restaurantDeliveryCharges}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="font-medium">VAT</div>
-                    <div className="font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.orderCharge?.VAT
-                        ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol}${data?.orderDetails?.orderCharge?.VAT}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                  <div className={`w-full bg-black h-[1px]`}></div>
-                  <div className="flex justify-between items-center gap-2">
-                    <div className="text-xl font-bold font-switzer">Total</div>
-                    <div className="text-xl font-medium text-themeBorderGray text-end">
-                      {data?.orderDetails?.orderCharge?.total
-                        ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol}${data?.orderDetails?.orderCharge?.total}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white shadow-textShadow p-5 space-y-5">
-                <h4 className="text-xl text-themeRed font-medium font-norms">
-                  Order History
-                </h4>
-
-                <div className="space-y-4">
-                  {data?.orderDetails?.orderHistories?.map((his, ind) => (
-                    <div className="flex items-center">
-                      <div className="flex justify-center items-center font-semibold w-8 h-[30px] bg-themeRed rounded-full text-white -mt-5">
-                        {ind + 1}
-                      </div>
-                      <div className="flex flex-col items-center justify-center w-full">
-                        <div className="font-switzer">
-                          {his?.time
-                            ? dayjs(his?.time).format("DD-MM-YYYY h:mm:ss A")
-                            : "N/A"}
-                        </div>
-                        <div className="font-medium text-themeBorderGray">
-                          {his?.orderStatus?.name}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       }
