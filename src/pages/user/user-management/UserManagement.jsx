@@ -51,7 +51,7 @@ export default function UserManagement() {
       label: activeRoles?.name,
     })
   );
-
+  console.log(roles)
   const userData = () => {
     const filteredData = data?.data?.filter((dat) => {
       return (
@@ -78,6 +78,12 @@ export default function UserManagement() {
       },
     });
   };
+  const outp = String(addUser?.email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+
 
   const addNewUser = async () => {
     if (addUser?.firstName === "") {
@@ -86,6 +92,8 @@ export default function UserManagement() {
       info_toaster("Please Enter Last Name");
     } else if (addUser?.email === "") {
       info_toaster("Please Enter Email");
+    } else if (outp == null) {
+      info_toaster("Email Format Incorrect");
     } else if (addUser?.countryCode === "") {
       info_toaster("Please Select Country Code");
     } else if (addUser?.phoneNum === "") {
@@ -175,7 +183,18 @@ export default function UserManagement() {
   ];
 
   const datas = [];
+  const csv = [];
   userData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.name,
+      email: values?.email,
+      phone: values?.phoneNum.toString(),
+      userType: values?.role,
+      status: values?.status ? "Active" : "InActive",
+      action: values?.status ? "True" : "False",
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -244,7 +263,7 @@ export default function UserManagement() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   {/* <BlackButton text="Roles & Permissions" /> */}
@@ -342,7 +361,7 @@ export default function UserManagement() {
                         <div className="col-span-1">
                           <PhoneInput
                             country={"pk"}
-                           
+
                             inputStyle={{
                               width: "100%",
                               height: "40px",
@@ -351,7 +370,7 @@ export default function UserManagement() {
                               border: "none",
                               background: "#F4F4F4",
                             }}
-                
+
                             inputProps={{
                               id: "countryCode",
                               name: "countryCode",

@@ -65,7 +65,17 @@ export default function StoreAddOn() {
   ];
 
   const datas = [];
+  const csv = [];
   cuisinesData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.name,
+      minAllowed: values?.minAllowed,
+      maxAllowed: values?.maxAllowed,
+      status: values?.status ? "Active": "InActive",
+      action: values?.status,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -130,7 +140,7 @@ export default function StoreAddOn() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   {/* <RedButton text="Add New Add on" onClick={openModal} /> */}

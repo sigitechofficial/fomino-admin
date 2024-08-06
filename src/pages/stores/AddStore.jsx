@@ -10,10 +10,9 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 
-export default function AddRestaurant() {
+export default function AddStore() {
 
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -23,7 +22,7 @@ export default function AddRestaurant() {
     country: '',
     password: '',
     confirmPassword: '',
-    businessType: 'restaurant',
+    businessType: 'store',
     businessName: '',
     businessEmail: '',
     code: '+92',
@@ -39,7 +38,7 @@ export default function AddRestaurant() {
     coverImage: null,
 
   });
-  console.log(formData,"formData before")
+  console.log(formData ,"formData without post")
 
 
   const handleChange = (e) => {
@@ -100,7 +99,7 @@ export default function AddRestaurant() {
       let res = await PostAPI("/retailer/signup", data)
       if (res.data.status === "1") {
         toast.success(res.data.message)
-        navigate("/all-restaurants");
+        navigate("/all-stores");
       } else {
         toast.error(res.data.message);
       }
@@ -128,7 +127,7 @@ export default function AddRestaurant() {
                   <FaArrowLeft />
                 </button>
                 <h2 className="text-themeRed text-lg font-bold font-norms">
-                  Add Restaurant
+                  Add Store
                 </h2>
               </div>
               {/* =======0========= */}
@@ -136,7 +135,7 @@ export default function AddRestaurant() {
 
                 <div className={`w-full py-10 mx-auto flex flex-col items-center shrink-0 ${slide === 0 ? "" : "hidden"}`}>
 
-                  <h4 className="text-3xl font-bold">Create a new Restaurant</h4>
+                  <h4 className="text-3xl font-bold">Create a new store</h4>
                   <div className="flex flex-col mt-8 w-1/3 items-center justify-center gap-8">
 
                     <div className="flex gap-4 mt-8 w-full items-center justify-center">
@@ -229,7 +228,7 @@ export default function AddRestaurant() {
                 <div className={`w-full py-10 mx-auto flex flex-col items-center shrink-0 ${slide === 1 ? "" : "hidden"}`}>
 
                   <div className={`absolute top-12 left-2 text-3xl cursor-pointer ${slide === 0 ? "hidden" : ""}`} onClick={() => setSlide((prev) => prev = prev - 1)}><MdOutlineArrowBackIosNew />
-                  </div> <h4 className="text-3xl font-bold">Restaurant Information</h4>
+                  </div> <h4 className="text-3xl font-bold">Store Information</h4>
                   <div className="flex flex-col mt-8 w-1/3 items-center justify-center gap-8">
 
                     <div className="flex flex-col gap-4 mt-8 w-full relative">
@@ -264,7 +263,7 @@ export default function AddRestaurant() {
                       }}>
                         Next 2/3
                       </button>
-                      <button className="bg-white text-gray-500 border-gray-400 border-[1px] text-lg font-semibold w-full block py-4 rounded-md mt-5" onClick={() => navigate("/all-restaurants")}>
+                      <button className="bg-white text-gray-500 border-gray-400 border-[1px] text-lg font-semibold w-full block py-4 rounded-md mt-5" onClick={() => navigate("/all-stores")}>
                         I'll do this later
                       </button>
                     </div>
@@ -274,12 +273,12 @@ export default function AddRestaurant() {
                 {/* =========2=========== */}
                 <div className="w-full py-10 mx-auto flex flex-col justify-center items-center shrink-0">
                   <div className={`absolute top-12 left-2 text-3xl cursor-pointer ${slide === 0 ? "hidden" : ""}`} onClick={() => setSlide((prev) => prev = prev - 1)}><MdOutlineArrowBackIosNew />
-                  </div> <h4 className="text-3xl font-bold">Restaurant Information</h4>
+                  </div> <h4 className="text-3xl font-bold">Store Information</h4>
                   <div className="flex flex-col mt-8 w-1/3 items-center justify-center gap-8">
 
 
                     <div className="w-full">
-                      <input className="bg-slate-100 outline-none py-4 px-3 w-full" placeholder="Restaurant Name" name="businessName" type="text" onChange={handleChange} />
+                      <input className="bg-slate-100 outline-none py-4 px-3 w-full" placeholder="Store Name" name="businessName" type="text" onChange={handleChange} />
                     </div>
                     <div className="w-full">
                       <input className="bg-slate-100 outline-none py-4 px-3 w-full" placeholder="Business Email" name="businessEmail" type="text" onChange={handleChange} />
@@ -339,7 +338,7 @@ export default function AddRestaurant() {
                       <button className="bg-green-700 text-white font-semibold w-full block py-4 rounded-md" onClick={() => {
 
                         if (!formData?.businessName) {
-                          toast.error("Enter Restaurant Name")
+                          toast.error("Enter Store Name")
                         } else if (!formData?.businessEmail) {
                           toast.error("Enter Business Email")
                         } else if (!formData?.businessPhone) {
@@ -367,8 +366,11 @@ export default function AddRestaurant() {
               </div>
             </div>
           </div>
+
+
         </>
       }
+
     />
   );
 }

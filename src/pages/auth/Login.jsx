@@ -16,6 +16,8 @@ import { loginAPI } from "../../utilities/PostAPI";
 import { setLoginStatus } from "../../utilities/AuthCheck";
 import { error_toaster, success_toaster } from "../../utilities/Toaster";
 import { MiniLoader } from "../../components/Loader";
+import { createSocketConnection } from "../../utilities/socket";
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -68,6 +70,9 @@ export default function Login() {
           localStorage.removeItem("rememberMe");
         }
 
+        // Create socket connection after successful login
+        const socket = createSocketConnection(res?.data?.data?.id?.toString());
+
         navigate("/");
         success_toaster("Login Successfully");
       } else {
@@ -97,7 +102,7 @@ export default function Login() {
                   Login to Dashboard
                 </h3>
                 <p className="font-normal text-base text-black text-opacity-60 font-switzer">
-                  Enter your credentails below
+                  Enter your credentials below
                 </p>
               </div>
             </div>

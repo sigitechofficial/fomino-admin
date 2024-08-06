@@ -43,14 +43,14 @@ export default function MenuCategories() {
       id: id,
       status: status ? false : true,
     }
-      let res = await PutAPI("admin/changestatusmenucategory", dets);
-      console.log(dets)
-      if (res.data.status === "1") {
-        toast.success(res.data.message);
-        reFetch("admin/getmenucategory")
-      }
-     
-    
+    let res = await PutAPI("admin/changestatusmenucategory", dets);
+    console.log(dets)
+    if (res.data.status === "1") {
+      toast.success(res.data.message);
+      reFetch("admin/getmenucategory")
+    }
+
+
   }
   const openModal = () => {
     setModal(true);
@@ -62,10 +62,6 @@ export default function MenuCategories() {
     {
       field: "name",
       header: "Name",
-    },
-    {
-      field: "image",
-      header: "Image",
     },
     {
       field: "createdAt",
@@ -86,20 +82,21 @@ export default function MenuCategories() {
   ];
 
   const datas = [];
+  const csv = [];
   menuCategoryData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.name,
+      createdAt: values?.createdAt,
+      updatedAt: values?.updatedAt,
+      status: values?.status ? "Active" : "InActive",
+      action: values?.status,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
       name: values?.name,
-      image: (
-        <div>
-          <img
-            src={`${BASE_URL}${values?.image}`}
-            alt="image"
-            className="w-24 h-24"
-          />
-        </div>
-      ),
       createdAt: dayjs(values?.createdAt).format("DD-MM-YYYY h:mm:ss A"),
       updatedAt: dayjs(values?.updatedAt).format("DD-MM-YYYY h:mm:ss A"),
       status: (
@@ -160,7 +157,7 @@ export default function MenuCategories() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   {/* <RedButton text="Add New Category" onClick={openModal} /> */}

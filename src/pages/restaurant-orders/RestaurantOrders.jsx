@@ -95,7 +95,24 @@ console.log(data, "order details")
   ];
 
   const datas = [];
+  const csv = [];
   orderData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      orderNum: values?.orderNum,
+      restaurantName: values?.restaurant?.businessName,
+      customerInfo: values?.user?.userName,
+      driverEarnings: values?.orderCharge?.driverEarnings,
+      restaurantEarnings: values?.orderCharge?.restaurantEarnings,
+      discount: values?.orderCharge?.discount,
+      deliveryFees: values?.orderCharge?.deliveryFees,
+      serviceFees: values?.orderCharge?.serviceCharges,
+      packingFees: values?.restaurant?.packingFee,
+      commission: values?.orderCharge?.adminDeliveryCharges,
+      orderMode: values?.orderMode?.name,
+      status: values?.orderStatus?.name,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -126,7 +143,7 @@ console.log(data, "order details")
             >
               Cancelled
             </div>
-          ) : values?.orderStatus?.name === "Rejected" ? (
+          ) : values?.orderStatus?.name === "Reject" ? (
             <div
               className="bg-[#1860CC33] text-[#1860CC] font-semibold p-2 rounded-md flex 
               justify-center"
@@ -185,7 +202,7 @@ console.log(data, "order details")
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
               </div>
             </div>

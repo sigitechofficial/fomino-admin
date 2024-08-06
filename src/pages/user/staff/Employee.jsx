@@ -52,7 +52,18 @@ export default function Employee() {
   ];
 
   const datas = [];
+  const csv = [];
   employeeData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.name,
+      email: values?.email,
+      phone: values?.phoneNum,
+      role: values?.role,
+      status: values?.status ? "Active" : "InActive",
+      action: values?.status=== "Active" ? "True":"False",
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -118,7 +129,7 @@ export default function Employee() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
               </div>
             </div>

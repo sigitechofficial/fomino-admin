@@ -112,7 +112,15 @@ export default function Permissions() {
   ];
 
   const datas = [];
+  const csv = [];
   permissionData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.title,
+      createdDate: values?.createdAt,
+      updatedDate: values?.updatedAt,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -146,7 +154,7 @@ export default function Permissions() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   <RedButton

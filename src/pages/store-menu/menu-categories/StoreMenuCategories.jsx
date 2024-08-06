@@ -15,7 +15,7 @@ import {
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import GetAPI from "../../../utilities/GetAPI";
-import {PutAPI} from "../../../utilities/PutAPI";
+import { PutAPI } from "../../../utilities/PutAPI";
 import Loader from "../../../components/Loader";
 import { BASE_URL } from "../../../utilities/URL";
 import dayjs from "dayjs";
@@ -40,16 +40,16 @@ export default function StoreMenuCategories() {
   const openModal = () => {
     setModal(true);
   };
-  const handleStatus = async(status, id) => {
+  const handleStatus = async (status, id) => {
     let dets = {
-      status: status?false:true,
-      id:id,
+      status: status ? false : true,
+      id: id,
     }
-    let res = await PutAPI("admin/changestatusmenucategory",dets)
-    if(res.data.status==="1"){
+    let res = await PutAPI("admin/changestatusmenucategory", dets)
+    if (res.data.status === "1") {
       reFetch("admin/getmenucategory")
       toast.success(res.data.message)
-    }else{
+    } else {
       toast.error(res.data.message);
     }
   }
@@ -84,7 +84,18 @@ export default function StoreMenuCategories() {
   ];
 
   const datas = [];
+  const csv = [];
   menuCategoryData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.name,
+      image: "image",
+      createdAt: values?.createdAt,
+      updatedAt: values?.updatedAt,
+      status: values?.status ? "Active" : "InActive",
+      action: values?.status,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -124,7 +135,7 @@ export default function StoreMenuCategories() {
           <label>
             <Switch
               onChange={() => {
-                handleStatus(values?.status,values?.id);
+                handleStatus(values?.status, values?.id);
               }}
               checked={values?.status}
               uncheckedIcon={false}
@@ -158,7 +169,7 @@ export default function StoreMenuCategories() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   {/* <RedButton text="Add New Category" onClick={openModal} /> */}

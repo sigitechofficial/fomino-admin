@@ -107,7 +107,16 @@ export default function Notifications() {
   ];
 
   const datas = [];
+  const csv = [];
   notificationData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      to: values?.to,
+      title: values?.title,
+      body: values?.body,
+      createdAt:values?.at,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -134,7 +143,7 @@ export default function Notifications() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   <RedButton text="Push New Notification" onClick={openModal} />

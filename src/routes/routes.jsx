@@ -111,6 +111,7 @@ const EditRestaurants = lazy(() =>
 // All Stores
 const Stores = lazy(() => import("../pages/stores/Stores"));
 const EditStore = lazy(() => import("../pages/stores/EditStore"));
+const AddStore = lazy(() => import("../pages/stores/AddStore"));
 
 // All Countries
 const Countries = lazy(() => import("../pages/country/Countries"));
@@ -144,6 +145,10 @@ const StoreEarnings = lazy(() => import("../pages/earnings/StoreEarnings"));
 // Front Settings
 const FrontSettings = lazy(() =>
   import("../pages/front-settings/FrontSetting")
+);
+// Current Order 
+const CurrentOrder = lazy(() =>
+  import("../pages/current-order/CurrentOrder")
 );
 // Payout Requet
 const PayoutRequest = lazy(() =>
@@ -376,6 +381,11 @@ const coreRoutes = [
     path: "/edit-store",
     component: EditStore,
   },
+  {
+    path: "/add-store",
+    component: AddStore,
+  },
+
 
   // All Countries
   {
@@ -425,6 +435,11 @@ const coreRoutes = [
   {
     path: "/front-settings",
     component: FrontSettings,
+  },
+  // Current Orders
+  {
+    path: "/current-orders",
+    component: CurrentOrder,
   },
   // Payout Request
   {

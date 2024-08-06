@@ -7,10 +7,13 @@ import { Suspense } from "react";
 import Login from "./pages/auth/Login";
 import { ToastContainer } from "react-toastify";
 import Loader from "./components/Loader";
+import { SocketProvider } from "./utilities/SocketContext";
 
 function App() {
+  
   return (
     <>
+     <SocketProvider>
       <ToastContainer />
       <ChakraProvider>
         <Router>
@@ -34,6 +37,7 @@ function App() {
           </Routes>
         </Router>
       </ChakraProvider>
+      </SocketProvider>
     </>
   );
 }

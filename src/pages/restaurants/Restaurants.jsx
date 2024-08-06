@@ -14,6 +14,7 @@ import { PutAPI } from "../../utilities/PutAPI";
 
 export default function Restaurants() {
   const { data, reFetch } = GetAPI("admin/getallrestaurants");
+  console.log("🚀 ~ Restaurants ~ data:", data)
   const [modal, setModal] = useState(false);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
@@ -103,8 +104,22 @@ export default function Restaurants() {
       header: "Action",
     },
   ];
+
+
+  const csv = []
   const datas = [];
   restaurantData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      logo: "image",
+      name: values?.businessName,
+      city: values?.city,
+      ownerName: values?.ownerName,
+      operatingTime: values?.operatingTime,
+      joinedAt: values?.joinedAt ? values?.joinedAt: "",
+      status: values?.status ? "Active" : "InActive",
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -185,7 +200,7 @@ export default function Restaurants() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   <RedButton

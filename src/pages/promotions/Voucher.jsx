@@ -25,7 +25,9 @@ import { PutAPI } from "../../utilities/PutAPI";
 
 export default function Voucher() {
   const { data, reFetch } = GetAPI("admin/allvouchers");
+
   const restaurants = GetAPI("admin/getallrestaurants");
+  console.log(data, "al restaurant")
   const [modal, setModal] = useState(false);
   const [loader, setLoader] = useState(false);
   const [modalType, setModalType] = useState("");
@@ -51,6 +53,7 @@ export default function Voucher() {
     conditionalAmount: "2",
   });
 
+
   const notificationData = () => {
     const filteredData = data?.data?.filter((dat) => {
       return (
@@ -63,13 +66,42 @@ export default function Voucher() {
     return filteredData;
   };
 
-  const openModal = (modType, id, code, value) => {
+  const handleStoreApplicable = (storeApplicable, status) => {
+    let storeNames = ""
+    let storeList = []
+    let values = storeApplicable.split(",")
+
+    if (status === "get") {
+      values?.map((val, i) => {
+        restaurants?.data?.data?.find((resturant, j) => val == resturant?.id && (storeNames += resturant?.businessName + ", ")
+        )
+      })
+      return storeNames
+    }
+    else if (status === "update") {
+      values?.map((val, i) => {
+        restaurants?.data?.data?.find((resturant, j) => val == resturant?.id && storeList.push({
+          value: resturant?.id,
+          label: resturant?.businessName
+        }))
+      })
+      return storeList
+    }
+  }
+
+  const openModal = (modType, id, code, value, from, to, storeApplicable, type) => {
+
+
     setModal(true);
     setModalType(modType);
     setUpdateVoucher({
       voucherId: id,
       code: code,
       value: value,
+      from: from.substring(0, 10),
+      to: to.substring(0, 10),
+      storeApplicable: handleStoreApplicable(storeApplicable, "update"),
+      type: options.find(el => el.label === type),
     });
   };
 
@@ -92,6 +124,7 @@ export default function Voucher() {
 
   const handleUpdateOnChange = (e) => {
     setUpdateVoucher({ ...updateVoucher, [e.target.name]: e.target.value });
+
   };
 
   const handleSelectChange = (selectedOptions) => {
@@ -104,15 +137,21 @@ export default function Voucher() {
   };
 
   const handleUpdateSelectChange = (selectedOptions) => {
+
     setUpdateVoucher({
       ...updateVoucher,
       storeApplicable: selectedOptions
-        ? selectedOptions.map((option) => option.value)
+        ? selectedOptions
         : [],
     });
+
   };
 
   const addNewVocher = async () => {
+    let before = new Date(addVoucher?.from);
+    let after = new Date(addVoucher?.to);
+    let tDate = new Date(date)
+
     if (addVoucher?.code === "") {
       info_toaster("Please Add Voucher Code");
     } else if (addVoucher?.value === "") {
@@ -123,11 +162,11 @@ export default function Voucher() {
       info_toaster(
         "Please Select the Restaurants that are Applicable for the Voucher."
       );
-    } else if (addVoucher?.from === "") {
+    } else if (addVoucher?.from === "" || before > after || before < tDate) {
       info_toaster("Please Select Voucher Start Date");
     } else if (addVoucher?.to === "") {
       info_toaster("Please Select Voucher End Date");
-    }else if (addVoucher?.from > addVoucher?.to) {
+    } else if (addVoucher?.from > addVoucher?.to) {
       info_toaster("Please Select Correct Date");
     } else {
       setLoader(true);
@@ -140,7 +179,7 @@ export default function Voucher() {
         storeApplicable: addVoucher?.storeApplicable,
         conditionalAmount: "2",
       });
-      console.log(res, "ghghjgj")
+
       if (res?.data?.status === "1") {
         reFetch();
         setLoader(false);
@@ -161,27 +200,45 @@ export default function Voucher() {
       }
     }
   };
+  const todayDate = () => {
+    const date = new Date();
+    let tdate = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    return (`${year}-0${month}-${tdate}`)
+  }
+  const date = todayDate()
 
   const update = async () => {
-    setLoader(true);
-    const res = await PutAPI("admin/updatevoucher", {
-      voucherId: updateVoucher?.voucherId,
-      code: updateVoucher?.code,
-      value: updateVoucher?.value,
-      type: updateVoucher?.type,
-      from: updateVoucher?.from,
-      to: updateVoucher?.to,
-      storeApplicable: updateVoucher?.storeApplicable,
-      conditionalAmount: "2",
-    });
-    if (res?.data?.status === "1") {
-      reFetch();
-      setLoader(false);
-      setModal(false);
-      success_toaster(res?.data?.message);
+    if (updateVoucher?.from > updateVoucher?.to) {
+      info_toaster("Please Select Correct Date");
+    } else if (updateVoucher?.from < date) {
+      info_toaster("Can't Select previous Date");
     } else {
-      error_toaster(res?.data?.message);
-      setLoader(false);
+      setLoader(true);
+      let store = [];
+      updateVoucher?.storeApplicable.map(item => store.push(item.value))
+      const res = await PutAPI("admin/updatevoucher", {
+        voucherId: updateVoucher?.voucherId,
+        code: updateVoucher?.code,
+        value: updateVoucher?.value,
+        type: updateVoucher?.type?.label,
+        from: updateVoucher?.from,
+        to: updateVoucher?.to,
+        storeApplicable: store,
+        conditionalAmount: "2",
+      });
+
+      console.log(updateVoucher, "updateVoucher")
+      if (res?.data?.status === "1") {
+        reFetch();
+        setLoader(false);
+        setModal(false);
+        success_toaster(res?.data?.message);
+      } else {
+        error_toaster(res?.data?.message);
+        setLoader(false);
+      }
     }
   };
 
@@ -206,10 +263,6 @@ export default function Voucher() {
       header: "Code",
     },
     {
-      field: "value",
-      header: "Value",
-    },
-    {
       field: "discount",
       header: "Discount",
     },
@@ -232,8 +285,10 @@ export default function Voucher() {
     {
       field: "applicableStore",
       header: "Applicable Store",
-    },
-    {
+    }, {
+      field: "associatedStore",
+      header: "Associated Store",
+    }, {
       field: "status",
       header: "Status",
     },
@@ -243,19 +298,35 @@ export default function Voucher() {
     },
   ];
 
+
+
   const datas = [];
+  const csv = [];
   notificationData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      code: values?.code,
+      discount: values?.discount ? values?.discount : "0.00",
+      conditionalAmount: values?.conditionalAmount,
+      type: values?.type,
+      applicableStore: handleStoreApplicable(values?.storeApplicable, "get"),
+      from: values?.from,
+      to: values?.to,
+      status: values?.status ? "Active" : "InActive",
+      action: values?.status,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
       code: values?.code,
-      value: values?.value,
       discount: values?.discount ? values?.discount : "0.00",
       conditionalAmount: values?.conditionalAmount
         ? values?.conditionalAmount
         : "0.00",
       type: values?.type,
-      applicableStore: values?.storeApplicable,
+      applicableStore: values?.storeApplicable,//handleStoreApplicable(values?.storeApplicable, "get"), 
+      associatedStore: <p className="bg-blue-500 text-white px-4 py-1 rounded inline-block cursor-pointer  font-semibold ">View</p>,
       from: dayjs(values?.from).format("DD-MM-YYYY h:mm:ss A"),
       to: dayjs(values?.to).format("DD-MM-YYYY h:mm:ss A"),
       status: (
@@ -296,20 +367,25 @@ export default function Voucher() {
 
           <EditButton
             text="Update"
-            onClick={() =>
+            onClick={() => {
+
               openModal(
                 "Update Voucher",
                 values?.id,
                 values?.code,
                 values?.value,
                 values?.from,
-                values?.to
+                values?.to,
+                values?.storeApplicable,
+                values?.type
               )
+            }
             }
           />
         </div>
       ),
     });
+
   });
 
   return data?.length === 0 ? (
@@ -328,7 +404,7 @@ export default function Voucher() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   <RedButton
@@ -417,7 +493,7 @@ export default function Voucher() {
                               type: e?.label,
                             })
                           }
-                         
+
                         />
                       </div>
 
@@ -447,7 +523,7 @@ export default function Voucher() {
                         </label>
                         <input
                           value={addVoucher?.from}
-                          type="date"
+                          type="datetime-local"
                           name="from"
                           id="from"
                           className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
@@ -464,7 +540,7 @@ export default function Voucher() {
                         </label>
                         <input
                           value={addVoucher?.to}
-                          type="date"
+                          type="datetime-local"
                           name="to"
                           id="to"
                           className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
@@ -472,7 +548,7 @@ export default function Voucher() {
                         />
                       </div>
                     </div>
-
+                    {console.log(addVoucher, "addv")}
                     <div className="flex justify-end col-span-2 gap-2">
                       <BlackButton
                         text="Cancel"
@@ -533,12 +609,13 @@ export default function Voucher() {
                         </label>
                         <Select
                           placeholder="Select"
+                          value={updateVoucher?.type}
                           name="type"
                           options={options}
                           onChange={(e) =>
                             setUpdateVoucher({
                               ...updateVoucher,
-                              type: e?.label,
+                              type: options.find(el => el.label === e?.label),
                             })
                           }
                         />
@@ -553,6 +630,7 @@ export default function Voucher() {
                         </label>
                         <Select
                           placeholder="Select"
+                          value={updateVoucher?.storeApplicable}
                           name="storeApplicable"
                           options={restaurantList}
                           isMulti
@@ -594,6 +672,7 @@ export default function Voucher() {
                         />
                       </div>
                     </div>
+                    {/* <button></button> */}
 
                     <div className="flex justify-end col-span-2 gap-2">
                       <BlackButton

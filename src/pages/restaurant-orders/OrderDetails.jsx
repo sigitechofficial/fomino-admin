@@ -65,7 +65,7 @@ export default function OrderDetails() {
             <div className="w-full flex gap-x-16">
               <div className="w-[55%]">
                 <div className="flex justify-between">
-                  <h4 className="font-medium text-xl">Order#<span className="font-medium text-base text-themeBorderGray">  {data?.orderDetails?.orderNum ? data?.orderDetails?.orderNum : "N/A"}</span></h4>
+                  <h4 className="font-medium text-xl flex items-center">Order#<span className="font-medium text-base text-themeBorderGray">{data?.orderDetails?.orderNum ? data?.orderDetails?.orderNum : "N/A"}</span></h4>
                   <div className="flex gap-3">
                     <button
                       className="flex items-center gap-1 font-medium border border-gray-300 rounded-md px-2 py-1.5 h-9 hover:bg-theme hover:text-white duration-100"
@@ -88,7 +88,7 @@ export default function OrderDetails() {
                     ? dayjs(data?.orderDetails?.createdAt).format("h:mm:ss A")
                     : "N/A"}</p></div>
                   <div className="flex"><p className="font-medium text-themeBorderGray">Payment Method:&nbsp;</p> <p className="font-medium">{data?.orderDetails?.paymentMethod ? data?.orderDetails?.paymentMethod.name : "N/A"}</p></div>
-                  <div className="flex"><p className="font-medium text-themeBorderGray">Payment Status:&nbsp;</p> <p> {data?.orderDetails?.paymentRecieved ? <div className="font-medium px-3 bg-green-500 rounded-md text-white">Paid</div> : <div className="font-medium px-3 bg-red-200 rounded-md text-red-600">Unpaid</div>}</p></div>
+                  <div className="flex"><p className="font-medium text-themeBorderGray">Payment Status:&nbsp;</p> <p> {data?.orderDetails?.orderStatus?.name ==="Reject" || data?.orderDetails?.orderStatus?.name ==="Cancelled"   ? <div className="font-medium px-3 bg-gray-500 rounded-md text-white">void</div> : (data?.orderDetails?.paymentRecieved ? <div className="font-medium px-3 bg-green-500 rounded-md text-red-600">Paid</div>:<div className="font-medium px-3 bg-red-200 rounded-md text-red-600">Unpaid</div>)}</p></div>
                   <div className="flex"><p className="font-medium text-themeBorderGray">Order Type:&nbsp;</p> <p className="font-medium px-3 bg-gray-200 rounded-md text-red-600">{data?.orderDetails?.orderType.type ? data?.orderDetails?.orderType.type : "N/A"}</p></div>
                 </div>
                 <hr className="bg-gray-300 h-[1px] my-5" />
@@ -110,7 +110,7 @@ export default function OrderDetails() {
 
                       </div>
                       <div className="flex-1 text-end">
-                        <p className="font-bold text-xl ">{data?.orderDetails?.restaurant?.currencyUnitID?.symbol}{items?.total}</p>
+                        <p className="font-bold text-xl ">{data?.productList[index]?.currencySign} {items?.total}</p>
                       </div>
                     </div>
 
@@ -123,7 +123,7 @@ export default function OrderDetails() {
                       <p>Subtotal</p>
                       <p>Delivery Fee</p>
                       <p>Service Charge</p>
-                      {data?.orderDetails?.orderCharge?.packingFee === "0" ? "" : <p>Packing Fee</p>}
+                      {data?.orderDetails?.orderCharge?.packingFee === "0" || (!data?.orderDetails?.orderCharge?.packingFee) ? "" : <p>Packing Fee</p>}
                     </div>
 
                     <div className="flex flex-col gap-2">
@@ -133,22 +133,22 @@ export default function OrderDetails() {
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <p>{data?.orderDetails?.subTotal ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol} ${data?.orderDetails?.subTotal}` : "N/A"}</p>
-                    <p>{data?.orderDetails?.orderCharge?.deliveryFees ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol} ${data?.orderDetails?.orderCharge?.deliveryFees}` : "N/A"}</p>
-                    <p>{data?.orderDetails?.orderCharge?.serviceCharges ? `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol} ${data?.orderDetails?.orderCharge?.serviceCharges}` : "N/A"} </p>
-                    <p>{data?.orderDetails?.orderCharge?.packingFee === "0" ? "" : `${data?.orderDetails?.restaurant?.currencyUnitID?.symbol} ${data?.orderDetails?.orderCharge?.packingFee}`}</p>
+                    <p>{data?.orderDetails?.subTotal ? `${data?.productList[0]?.currencySign} ${data?.orderDetails?.subTotal}` : "N/A"}</p>
+                    <p>{data?.orderDetails?.orderCharge?.deliveryFees ? `${data?.productList[0]?.currencySign} ${data?.orderDetails?.orderCharge?.deliveryFees}` : "N/A"}</p>
+                    <p>{data?.orderDetails?.orderCharge?.serviceCharges ? `${data?.productList[0]?.currencySign} ${data?.orderDetails?.orderCharge?.serviceCharges}` : "N/A"} </p>
+                    <p>{data?.orderDetails?.orderCharge?.packingFee === "0" || (!data?.orderDetails?.orderCharge?.packingFee) ? "" : `${data?.productList[0]?.currencySign} ${data?.orderDetails?.orderCharge?.packingFee}`}</p>
                   </div>
                 </div>
 
 
-
-                <div className="font-bold text-xl flex justify-between mt-2">
-                  <p>Total</p><p>{data?.orderDetails?.restaurant?.currencyUnitID?.symbol}{data?.orderDetails?.total}</p>
-                </div>
                 <hr className="bg-gray-300 h-[1px] my-2" />
-                <div className="font-bold text-xl flex justify-between">
-                  <p className="font-medium text-themeBorderGray">Paid by customer</p><p>N/A</p>
+                <div className="font-bold text-xl flex justify-between mt-2">
+                  <p>Total</p><p>{data?.productList[0]?.currencySign} {data?.orderDetails?.total}</p>
                 </div>
+              
+                {/* <div className="font-bold text-xl flex justify-between">
+                  <p className="font-medium text-themeBorderGray">Paid by customer</p><p>N/A</p>
+                </div> */}
 
               </div>
 

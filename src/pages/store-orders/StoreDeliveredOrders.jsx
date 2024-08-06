@@ -85,7 +85,24 @@ export default function StoreDeliveredOrders() {
     },
   ];
   const datas = [];
+  const csv = [];
   orderData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      orderNum: values?.orderNum,
+      storeName: values?.restaurant?.businessName,
+      customerInfo: values?.user?.userName,
+      driverEarnings: values?.orderCharge?.driverEarnings,
+      storeEarnings: values?.orderCharge?.restaurantEarnings,
+      discount: values?.orderCharge?.discount,
+      deliveryFees: values?.orderCharge?.deliveryFees,
+      serviceFees: values?.orderCharge?.serviceCharges,
+      packingFees: values?.restaurant?.packingFee,
+      commission: values?.orderCharge?.adminDeliveryCharges,
+      orderMode: values?.orderMode?.name,
+      status:values?.orderStatus?.name 
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -93,7 +110,7 @@ export default function StoreDeliveredOrders() {
       storeName: values?.restaurant?.businessName,
       customerInfo: values?.user?.userName,
       driverEarnings: values?.orderCharge?.driverEarnings,
-      restaurantEarnings: values?.orderCharge?.restaurantEarnings,
+      storeEarnings: values?.orderCharge?.restaurantEarnings,
       discount: values?.orderCharge?.discount,
       deliveryFees: values?.orderCharge?.deliveryFees,
       serviceFees: values?.orderCharge?.serviceCharges,
@@ -175,7 +192,7 @@ export default function StoreDeliveredOrders() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
               </div>
             </div>

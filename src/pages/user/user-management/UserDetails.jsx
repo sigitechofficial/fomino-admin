@@ -12,6 +12,7 @@ import Loader, { MiniLoader } from "../../../components/Loader";
 import dayjs from "dayjs";
 import { PutAPI } from "../../../utilities/PutAPI";
 import { error_toaster, success_toaster } from "../../../utilities/Toaster";
+import { toast } from "react-toastify";
 
 export default function UserDetails() {
   const location = useLocation();
@@ -31,25 +32,35 @@ export default function UserDetails() {
   const handleOnEventChange = (e) => {
     setDetails({ ...details, [e.target.name]: e.target.value });
   };
+  const outp = String(details?.email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
 
   const updateUserDetails = async () => {
-    setLoader(true);
-    const res = await PutAPI(`admin/updateuserdetails/${location?.state?.id}`, {
-      firstName: details?.firstName,
-      lastName: details?.lastName,
-      email: details?.email,
-      countryCode: details?.countryCode,
-      phoneNum: details?.phoneNum,
-      password: details?.password,
-    });
-    if (res?.data?.status === "1") {
-      reFetch();
-      setLoader(false);
-      success_toaster(res?.data?.message);
+    if (outp == null) {
+      toast.error("Email Format Incorrect")
     } else {
-      setLoader(false);
-      error_toaster(res?.data?.message);
+      setLoader(true);
+      const res = await PutAPI(`admin/updateuserdetails/${location?.state?.id}`, {
+        firstName: details?.firstName,
+        lastName: details?.lastName,
+        email: details?.email,
+        countryCode: details?.countryCode,
+        phoneNum: details?.phoneNum,
+        password: details?.password,
+      });
+      if (res?.data?.status === "1") {
+        reFetch();
+        setLoader(false);
+        success_toaster(res?.data?.message);
+      } else {
+        setLoader(false);
+        error_toaster(res?.data?.message);
+      }
     }
+
   };
 
   useEffect(() => {

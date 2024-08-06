@@ -183,7 +183,17 @@ export default function Countries() {
   ];
 
   const datas = [];
+  const csv = [];
   countryData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.name,
+      image:"Image",
+      shortName: values?.shortName,
+      status:values?.status ? "Active":"InActive",
+      action: values?.status
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -266,7 +276,7 @@ export default function Countries() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   <RedButton

@@ -53,7 +53,16 @@ export default function Zones() {
     },
   ];
   const datas = [];
+  const csv = [];
   zonesData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.name,
+      restaurantName: values?.restaurant?.businessName,
+      baseCharges: values?.zoneDetail?.baseCharges,
+      maxDeliveryCharges: values?.zoneDetail?.maxDeliveryCharges,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -99,7 +108,7 @@ export default function Zones() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   <RedButton

@@ -67,14 +67,14 @@ export default function AddOnCollections() {
       field: "resName",
       header: "Restaurant Name",
     },
-    {
-      field: "minAllowed",
-      header: "Minimum Allowed",
-    },
-    {
-      field: "maxAllowed",
-      header: "Maximum Allowed",
-    },
+    // {
+    //   field: "minAllowed",
+    //   header: "Minimum Allowed",
+    // },
+    // {
+    //   field: "maxAllowed",
+    //   header: "Maximum Allowed",
+    // },
     {
       field: "status",
       header: "Status",
@@ -86,14 +86,23 @@ export default function AddOnCollections() {
   ];
 
   const datas = [];
+  const csv = [];
   addOnCollectionData()?.map((values, index) => {
-  
+  csv.push({
+    sn: index + 1,
+    name: values?.title,
+    resName: values?.restaurant,
+    // minAllowed: values?.minAllowed,
+    // maxAllowed: values?.maxAllowed,
+    status:values?.status ? "Active": "InActive",
+    action:values.status
+  })
     return datas.push({
       sn: index + 1,
       name: values?.title,
       resName: values?.restaurant,
-      minAllowed: values?.minAllowed,
-      maxAllowed: values?.maxAllowed,
+      // minAllowed: values?.minAllowed,
+      // maxAllowed: values?.maxAllowed,
       status: (
         <div>
           {values?.status ? (
@@ -153,7 +162,7 @@ export default function AddOnCollections() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   {/* <BlackButton text="Roles & Permissions" /> */}

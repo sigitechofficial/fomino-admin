@@ -11,7 +11,7 @@ const TableBooking = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const { data } = GetAPI("admin/getTableBooking");
-  console.log(data?.data?.data)
+  console.log(data, "table booking")
 
 
   const orderData = () => {
@@ -61,6 +61,10 @@ const TableBooking = () => {
       header: "Guests",
     },
     {
+      field: "sRequest",
+      header: "Special Request",
+    },
+    {
       field: "orderStatus",
       header: "Order Status",
     },
@@ -71,8 +75,19 @@ const TableBooking = () => {
   ];
 
 
-
+  let csv = []
   let datas = orderData()?.map((item, index) => {
+    csv.push({
+      sn: index + 1,
+      id: item?.id,
+      restaurantName: item?.restaurant?.businessName,
+      customerInfo: item?.user?.userName,
+      contact: ` ${item?.restaurant?.countryCode} ${item?.restaurant?.phoneNum}`,
+      date: item?.date,
+      time: item?.time,
+      guests: item?.noOfMembers,
+      orderStatus: item?.orderStatus?.displayText,
+    })
     return {
       sn: index + 1,
       id: item?.id,
@@ -82,6 +97,7 @@ const TableBooking = () => {
       date: item?.date,
       time: item?.time,
       guests: item?.noOfMembers,
+      sRequest: <p>Window View</p>,
       orderStatus: item?.orderStatus?.displayText === "Delivered" ? (
         <div
           className="bg-[#21965314] text-themeGreen font-semibold p-2 rounded-md flex 
@@ -89,21 +105,35 @@ const TableBooking = () => {
         >
           Delivered
         </div>
-      ) : item?.orderStatus?.displayText === "Cancelled" ?(
+      ) : item?.orderStatus?.displayText === "Cancelled" ? (
         <div
           className="bg-[#EE4A4A14] text-themeRed font-semibold p-2 rounded-md flex 
           justify-center"
         >
           Cancelled
         </div>
-      ):item?.orderStatus?.displayText === "Rejected" ?(
+      ) : item?.orderStatus?.displayText === "Reject" ? (
         <div
           className="bg-[#1860CC33] text-[#1860CC] font-semibold p-2 rounded-md flex 
           justify-center"
         >
           Rejected
         </div>
-      ):(
+      ) : item?.orderStatus?.displayText === "Placed" ? (
+        <div
+          className="bg-[#EE4A4A14] text-themeRed font-semibold p-2 rounded-md flex 
+          justify-center"
+        >
+          Placed
+        </div>
+      ) : item?.orderStatus?.displayText === "Accepted" ? (
+        <div
+          className="bg-[#EE4A4A14] text-themeRed font-semibold p-2 rounded-md flex 
+          justify-center"
+        >
+          Accepted
+        </div>
+      ) : (
         <div
           className="bg-[#EC6C3033] text-[#EC6C30] font-semibold p-2 rounded-md flex 
           justify-center"
@@ -111,7 +141,7 @@ const TableBooking = () => {
           Scheduled
         </div>
       ),
-      action: <div className='border-gray-300 border-[1px] px-4 py-1 font-semibold rounded-md inline-block cursor-pointer' onClick={()=>navigate("/booking-details",{state:{id: item?.id}})} >View Details</div>
+      action: <div className='border-gray-300 border-[1px] px-4 py-1 font-semibold rounded-md inline-block cursor-pointer' onClick={() => navigate("/booking-details", { state: { id: item?.id } })} >View Details</div>
     }
   })
 
@@ -132,7 +162,7 @@ const TableBooking = () => {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
               </div>
             </div>

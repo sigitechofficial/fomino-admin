@@ -100,7 +100,18 @@ export default function Drivers() {
   ];
 
   const datas = [];
+  const csv = [];
   driverData()?.map((values, index) => {
+     csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.name,
+      email: values?.email,
+      phone: values?.phoneNum,
+      balance: values?.balance,
+      status: values?.status,
+      action:values?.status === "Active" ? true : false
+     })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -169,7 +180,7 @@ export default function Drivers() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   <RedButton text="Add New Driver" onClick={openModal} />

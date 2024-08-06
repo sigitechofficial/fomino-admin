@@ -86,7 +86,7 @@ export default function Stores() {
     },
     {
       field: "name",
-      header: "Restaurant Name",
+      header: "Store Name",
     },
     {
       field: "city",
@@ -114,7 +114,20 @@ export default function Stores() {
     },
   ];
   const datas = [];
+  const csv = [];
   restaurantData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      logo: "Image",
+      name: values?.businessName,
+      city: values?.city,
+      ownerName: values?.ownerName,
+      operatingTime: values?.operatingTime,
+      // joinedAt: values?.joinedAt,
+      status: values?.status ? "Active" : "InActive",
+      action: values?.status,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -195,11 +208,13 @@ export default function Stores() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   {/* <BlackButton text="Roles & Permissions" /> */}
-                  <RedButton text="Add New Store" onClick={openModal} />
+                  <RedButton text="Add New Store" onClick={() => {
+                      navigate("/add-store");
+                    }} />
                 </div>
               </div>
             </div>

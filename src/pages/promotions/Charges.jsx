@@ -82,7 +82,14 @@ export default function Charges() {
     },
   ];
   const datas = [];
+  const csv = [];
   orderData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      title: values?.name,
+      value: values?.value,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -116,7 +123,7 @@ export default function Charges() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
               </div>
             </div>

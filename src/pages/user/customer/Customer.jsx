@@ -79,7 +79,17 @@ export default function Customer() {
     },
   ];
   const datas = [];
+  const csv = [];
   customerData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.name,
+      email: values?.email,
+      phone: values?.phoneNum,
+      status: values?.status,
+      action: values?.status === "Active" ? true : false,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -146,7 +156,7 @@ export default function Customer() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
               </div>
             </div>

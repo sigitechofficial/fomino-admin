@@ -9,12 +9,15 @@ export default function ListHead(props) {
     <li className="px-3">
       <Link to={props.to} className="space-y-1">
         <div
-          className={`flex gap-x-2 justify-between items-center py-2 lg:py-3 px-2 rounded-md  hover:bg-themeRed hover:text-white duration-200
-       ${
-         location === props.to || props.active
-           ? "bg-themeRed text-white"
-           : "bg-transparent text-themeLightGray"
-       }`}
+          className={`flex gap-x-2 justify-between items-center py-2 lg:py-3 px-2 rounded-md duration-200
+            ${
+              location === props.to || props.active
+                ? "text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 font-medium rounded-lg text-sm py-2.5 text-center mb-2"
+                : "bg-transparent text-themeLightGray"
+            }
+            hover:bg-gradient-to-r hover:from-red-400 hover:via-red-500 hover:to-red-600 hover:text-white
+            focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800
+          `}
           onClick={props.onClick}
         >
           <div className="flex items-center gap-x-1">

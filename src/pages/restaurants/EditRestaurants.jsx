@@ -21,16 +21,23 @@ import {
   Autocomplete,
   MarkerF,
 } from "@react-google-maps/api";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+
 import Helment from "../../components/Helment";
 import MyDataTable from "../../components/MyDataTable";
+import { toast } from "react-toastify";
 
 export default function EditRestaurants() {
   const location = useLocation();
   const { data, reFetch } = GetAPI(
     `admin/getmetadatarestaurant/${location?.state?.resId}`
   );
+  console.log(data, "data")
+
   const deliveryType = GetAPI("admin/activedeliverytype");
   const [tab, setTab] = useState("General");
+  const [li, setLi] = useState("");
+  const [liToggle, setLiToggle] = useState(false);
   const [search, setSearch] = useState("");
   const [loader, setLoader] = useState(false);
   const [map, setMap] = useState(null);
@@ -55,11 +62,12 @@ export default function EditRestaurants() {
     countryCode: "",
     phoneNum: "",
     certificateCode: "",
-    logo: "",
-    coverImage: "",
+    logo: null,
+    coverImage: null,
     openingTime: "",
     closingTime: "",
   });
+
   const [deliveryData, setDeliveryData] = useState({
     deliveryTypeId: "",
     deliveryFeeTypeId: "",
@@ -107,6 +115,7 @@ export default function EditRestaurants() {
     city: "",
     country: "",
   });
+  const [updateConfig, setUpdateConfig] = useState({});
 
   const deliveryTypeOptions = [];
   deliveryType?.data?.data?.map((del, ind) => {
@@ -240,6 +249,7 @@ export default function EditRestaurants() {
     const file = e.target.files[0];
     if (file && type === "Cover Image") {
       const imageUrl = URL.createObjectURL(file);
+
       setGeneral({
         ...general,
         coverImage: file,
@@ -257,18 +267,23 @@ export default function EditRestaurants() {
   };
 
   const updateGeneralData = async () => {
+
     setLoader(true);
-    let res = await PutAPI("admin/editrestaurantgeneral", {
-      id: general?.id,
-      businessName: general?.businessName,
-      businessEmail: general?.businessEmail,
-      description: general?.description,
-      countryCode: general?.countryCode,
-      phoneNum: general?.phoneNum,
-      certificateCode: general?.certificateCode,
-      openingTime: general?.openingTime,
-      closingTime: general?.closingTime,
-    });
+    const data = new FormData();
+    data.append('id', general?.id);
+    data.append('businessName', general?.businessName);
+    data.append('businessEmail', general?.businessEmail);
+    data.append('description', general?.description);
+    data.append('countryCode', general?.countryCode);
+    data.append('phoneNum', general?.phoneNum);
+    data.append('certificateCode', general?.certificateCode);
+    data.append('openingTime', general?.openingTime);
+    data.append('closingTime', general?.closingTime);
+    data.append('code', general?.code);
+    data.append('logo', general?.logo);
+    data.append('coverImage', general?.coverImage);
+
+    let res = await PutAPI("admin/editrestaurantgeneral", data);
     if (res?.data?.status === "1") {
       reFetch();
       setLoader(false);
@@ -278,6 +293,28 @@ export default function EditRestaurants() {
       error_toaster(res?.data?.message);
     }
   };
+  // =========================updateConfigurations==============================================
+  const handleSwitchConfigChange = async (checked, name) => {
+
+    setUpdateConfig(prevConfig => {
+      const newConfig = { ...prevConfig, [name]: checked };
+      updateConfigurations(newConfig);
+    });
+  }
+
+  const updateConfigurations = async (config) => {
+    try {
+      const res = await PutAPI(`admin/updateConfiguration/${location?.state?.resId}`, config);
+      if (res?.data?.status === "1") {
+        toast.success(res?.data?.message);
+        reFetch();
+      }
+    } catch (error) {
+      toast.error('Failed to update configurations.');
+    }
+  }
+
+  // =========================updateConfigurations End==============================================
 
   const updateMetaData = async () => {
     setLoader(true);
@@ -415,6 +452,7 @@ export default function EditRestaurants() {
     });
   };
 
+
   const handleSearchChange = (categoryName, value) => {
     setSearch({
       ...search,
@@ -484,6 +522,8 @@ export default function EditRestaurants() {
                   "Bank Details"
                 ) : tab === "Restaurant timings" ? (
                   "Restaurant timings"
+                ) : tab === "Configurations" ? (
+                  "Configurations"
                 ) : (
                   <></>
                 )}
@@ -531,6 +571,11 @@ export default function EditRestaurants() {
                   title="Restaurant Timings"
                   tab={tab}
                   onClick={() => setTab("Restaurant Timings")}
+                />
+                <TabButton
+                  title="Configurations"
+                  tab={tab}
+                  onClick={() => setTab("Configurations")}
                 />
               </ul>
               <div className={`w-full bg-[#00000033] h-[1px]`}></div>
@@ -1063,18 +1108,26 @@ export default function EditRestaurants() {
                     <div className="grid grid-cols-3 gap-4 mt-10">
 
 
-                      {data?.data?.menuSetting?.rmc.length>0 ? (data?.data?.menuSetting?.rmc?.map((items, index) => (
-                        <div className="flex justify-center items-center p-2 rounded-xl  shadow-md gap-4 cursor-pointer">
-                          <img className="w-32 h-32 rounded-2xl object-cover shrink-0" src={`${BASE_URL}${items?.R_PLinks[index]?.image}`} alt="menu image" />
-                          <div>
-                            <h4 className="font-semibold text-2xl">{items?.menuCategory?.name}</h4>
-                            <p className="text-gray-500">Cheeseburger, Coca cola, Cheeseburger, cocacola, Cheeseburge</p>
-                            <h4 className="text-xl font-semibold">{items?.R_PLinks[index]?.originalPrice ? items?.R_PLinks.map(itm => ("$" + itm.originalPrice)) : "N/A"}</h4>
-                          </div>
-                        </div>
+                      {data?.data?.menuSetting?.rmc.length > 0 ? (data?.data?.menuSetting?.rmc?.map((items, index) => {
+                        return (
+                          items?.R_PLinks.map((elem, idx) => {
+                            return (
+                              <div className="flex justify-center items-center p-2 rounded-xl  shadow-md gap-4 cursor-pointer">
+                                <img className="w-32 h-32 rounded-2xl object-cover shrink-0" src={`${BASE_URL}${elem?.image}`} alt="menu image" />
+                                <div>
+                                  <h4 className="font-semibold text-2xl">{elem?.name}</h4>
+                                  {console.log(elem?.productCollections?.map(itm => itm?.collection?.id, "check data"))}
+                                  <p className="text-gray-500">{elem?.productCollections?.map(itm => itm?.collection?.collectionAddons[0]?.name)}</p>
+                                  <h4 className="text-xl font-semibold">{elem.originalPrice ? "CHF" + elem?.originalPrice : "N/A"}</h4>
+                                </div>
+                              </div>
+                            )
+
+                          })
 
 
-                      ))) : <p className="font-semibold text-lg text-gray-500">N/A</p>  }
+                        )
+                      })) : <p className="font-semibold text-lg text-gray-500">N/A</p>}
 
 
                     </div>
@@ -1553,6 +1606,390 @@ export default function EditRestaurants() {
                         <BlackButton text="Update" onClick={updateDelivery} />
                       </div>
                     </div>
+                  </div>
+                )
+
+              ) : tab === "Configurations" ? (
+                loader ? (
+                  <MiniLoader />
+                ) : (
+                  <div className="pt-4">
+                    <p className="text-black text-lg font-switzer font-semibold">Settings</p>
+                    <div className="w-1/2 text-white font-semibold text-lg">
+                      <ul>
+                        <li className="bg-themeRed py-2"> <div className="flex justify-between cursor-pointer px-4 text-xl font-bold"><p>Restaurant Status Management</p> <p>Status</p></div></li>
+                        <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4" onClick={() => { setLi("Open"); setLiToggle(prev => prev = !prev) }} ><p>Open</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${liToggle && li === "Open" ? "rotate-180" : ""}`} size={29} /></div>
+                        </li>
+                        <ul className={`${liToggle && li === "Open" ? "block" : "hidden"} text-sm text-gray-300`}>
+
+                          <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><p>The restaurant is accepting standard pickup orders</p>   <Switch
+                            checked={data?.data?.configuration?.isOpen_pickupOrders}
+                            onChange={(checked) => {
+
+                              handleSwitchConfigChange(checked, "isOpen_pickupOrders");
+                            }
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                          <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting standard Delivery orders</p>   <Switch
+                            checked={data?.data?.configuration?.isOpen_deliveryOrders}
+                            onChange={(checked) => handleSwitchConfigChange(checked, "isOpen_deliveryOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                          <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting Schedule pickup orders</p>   <Switch
+                            checked={data?.data?.configuration?.isOpen_schedule_pickupOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "isOpen_schedule_pickupOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                          <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting Schedule Delivery orders</p>   <Switch
+                            checked={data?.data?.configuration?.isOpen_schedule_deliveryOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "isOpen_schedule_deliveryOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                        </ul>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer" onClick={() => { setLi("Close"); setLiToggle(prev => prev = !prev) }} > <div className="flex justify-between px-4"><p>Close</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${liToggle && li === "Close" ? "rotate-180" : ""}`} size={29} /></div>
+
+                        </li>
+                        <ul className={`${liToggle && li === "Close" ? "block" : "hidden"} text-sm text-gray-300`}>
+                          <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><p>The restaurant is accepting schedule pickup orders</p>   <Switch
+                            checked={data?.data?.configuration?.isClose_schedule_pickupOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "isClose_schedule_pickupOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                          <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting schedule Delivery orders</p>   <Switch
+                            checked={data?.data?.configuration?.isClose_schedule_deliveryOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "isClose_schedule_deliveryOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                        </ul>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer" onClick={() => { setLi("Temporary Closed"); setLiToggle(prev => prev = !prev) }} > <div className="flex justify-between px-4"><p>Temporary Closed</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${liToggle && li === "Temporary Closed" ? "rotate-180" : ""}`} size={29} /></div>
+
+
+                        </li>
+                        <ul className={`${liToggle && li === "Temporary Closed" ? "block" : "hidden"} text-sm text-gray-300`}>
+                          <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting pickup orders</p>   <Switch
+                            checked={data?.data?.configuration?.temporaryClose_pickupOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "temporaryClose_pickupOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                          <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting schedule pickup orders</p>   <Switch
+                            checked={data?.data?.configuration?.temporaryClose_schedule_pickupOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "temporaryClose_schedule_pickupOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                          <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting schedule delivery orders</p>   <Switch
+                            checked={data?.data?.configuration?.temporaryClose_schedule_deliveryOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "temporaryClose_schedule_deliveryOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                        </ul>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer" onClick={() => { setLi("Rush Mode"); setLiToggle(prev => prev = !prev) }} > <div className="flex justify-between px-4"><p>Rush Mode</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${liToggle && li === "Rush Mode" ? "rotate-180" : ""}`} size={29} /></div>
+
+
+                        </li>
+                        <ul className={`${liToggle && li === "Rush Mode" ? "block" : "hidden"} text-sm text-gray-300`}>
+                          <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting standard pickup orders</p>   <Switch
+                            checked={data?.data?.configuration?.isRushMode_pickupOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "isRushMode_pickupOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                          <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting standard delivery orders</p>   <Switch
+                            checked={data?.data?.configuration?.isRushMode_deliveryOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "isRushMode_deliveryOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                          <li className="bg-[#1e1b1b] py-2  cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting schedule pickup orders</p>   <Switch
+                            checked={data?.data?.configuration?.isRushMode_schedule_pickupOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "isRushMode_schedule_pickupOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                          <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting schedule delivery orders</p>   <Switch
+                            checked={data?.data?.configuration?.isRushMode_schedule_deliveryOrders}
+                            onChange={(checked) =>
+                              handleSwitchConfigChange(checked, "isRushMode_schedule_deliveryOrders")
+                            }
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            onColor="#e13743"
+                            onHandleColor="#fff"
+                            className="react-switch"
+                            boxShadow="none"
+                            width={36}
+                            height={20}
+                          /></div></li>
+                        </ul>
+                      </ul>
+                      <ul>
+                        <li className="bg-themeRed py-2"> <div className="flex justify-between px-4 cursor-pointer text-xl font-bold"><p>Additional Functions</p> <p>Status</p>
+                        </div></li>
+                        <li className="bg-[#1e1b1b] py-2"> <div className="flex justify-between px-4 cursor-pointer items-center"> <div><p> Delivery &#40; Delivery by Fomino &#41;</p><p className="text-sm text-gray-300">Activate this option to allow delivery by other users</p> </div>  <Switch
+                          checked={data?.data?.configuration?.delivery}
+                          onChange={(checked) =>
+                            handleSwitchConfigChange(checked, "delivery")
+                          }
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          onColor="#e13743"
+                          onHandleColor="#fff"
+                          className="react-switch"
+                          boxShadow="none"
+                          width={36}
+                          height={20}
+                        />
+                        </div></li>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer "> <div className="flex justify-between px-4 items-center"><div> <p>Take Away</p><p className="text-sm text-gray-300">Enable or disable take away services</p></div>   <Switch
+                          checked={data?.data?.configuration?.takeAway}
+                          onChange={(checked) =>
+                            handleSwitchConfigChange(checked, "takeAway")
+                          }
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          onColor="#e13743"
+                          onHandleColor="#fff"
+                          className="react-switch"
+                          boxShadow="none"
+                          width={36}
+                          height={20}
+                        />
+                        </div></li>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div><p>Table Bookings</p><p className="text-sm text-gray-300">Enable or disable table booking services</p></div>   <Switch
+                          checked={data?.data?.configuration?.tableBooking}
+                          onChange={(checked) =>
+                            handleSwitchConfigChange(checked, "tableBooking")
+                          }
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          onColor="#e13743"
+                          onHandleColor="#fff"
+                          className="react-switch"
+                          boxShadow="none"
+                          width={36}
+                          height={20}
+                        />
+                        </div></li>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div><p>Stamp Cards</p><p className="text-sm text-gray-300">Enable or disable Stamp Card services</p>  </div>  <Switch
+                          checked={data?.data?.configuration?.stampCard}
+                          onChange={(checked) =>
+                            handleSwitchConfigChange(checked, "stampCard")
+                          }
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          onColor="#e13743"
+                          onHandleColor="#fff"
+                          className="react-switch"
+                          boxShadow="none"
+                          width={36}
+                          height={20}
+                        />
+                        </div></li>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div><p>Payment &#10629; Cash &#10630;</p><p className="text-sm text-gray-300">Enable or disable cash payment services</p> </div>   <Switch
+                          checked={data?.data?.configuration?.cod}
+                          onChange={(checked) =>
+                            handleSwitchConfigChange(checked, "cod")
+                          }
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          onColor="#e13743"
+                          onHandleColor="#fff"
+                          className="react-switch"
+                          boxShadow="none"
+                          width={36}
+                          height={20}
+                        />
+                        </div></li>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div> <p>Currency &#10629; Euro &#10630; </p><p className="text-sm text-gray-300">Accept or decline cash Euro currency</p> </div> <Switch
+                          checked={data?.data?.configuration?.euro}
+                          onChange={(checked) =>
+                            handleSwitchConfigChange(checked, "euro")
+                          }
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          onColor="#e13743"
+                          onHandleColor="#fff"
+                          className="react-switch"
+                          boxShadow="none"
+                          width={36}
+                          height={20}
+                        />
+                        </div></li>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div><p>Print</p> <p className="text-sm text-gray-300">Automatically prints receipts upon order</p> </div> <Switch
+                          checked={data?.data?.configuration?.print}
+                          onChange={(checked) =>
+                            handleSwitchConfigChange(checked, "print")
+                          }
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          onColor="#e13743"
+                          onHandleColor="#fff"
+                          className="react-switch"
+                          boxShadow="none"
+                          width={36}
+                          height={20}
+                        />
+                        </div></li>
+                      </ul>
+                      <ul>
+                        <li className="bg-themeRed py-2"> <div className="flex justify-between px-4 cursor-pointer text-xl font-bold"><p>Sound Settings</p> <p>Status</p>
+                        </div></li>
+                        <li className="bg-[#1e1b1b] py-2"> <div className="flex justify-between px-4 cursor-pointer items-center"><div><p>Incomming Order</p><p className="text-sm text-gray-300">Pikachu</p></div>  <Switch
+                          checked={true}
+                          // onChange={(checked) =>
+                          //   handleSwitchChange(checked, "isFeatured")
+                          // }
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          onColor="#e13743"
+                          onHandleColor="#fff"
+                          className="react-switch"
+                          boxShadow="none"
+                          width={36}
+                          height={20}
+                        />
+                        </div></li>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div><p>Ready Order</p><p className="text-sm text-gray-300">Pikachu</p></div> <Switch
+                          checked={true}
+                          // onChange={(checked) =>
+                          //   handleSwitchChange(checked, "isFeatured")
+                          // }
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          onColor="#e13743"
+                          onHandleColor="#fff"
+                          className="react-switch"
+                          boxShadow="none"
+                          width={36}
+                          height={20}
+                        />
+                        </div></li>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div><p>Table Booking Order</p><p className="text-sm text-gray-300">Pikachu</p></div> <Switch
+                          checked={true}
+                          // onChange={(checked) =>
+                          //   handleSwitchChange(checked, "isFeatured")
+                          // }
+                          uncheckedIcon={false}
+                          checkedIcon={false}
+                          onColor="#e13743"
+                          onHandleColor="#fff"
+                          className="react-switch"
+                          boxShadow="none"
+                          width={36}
+                          height={20}
+                        />
+                        </div></li>
+                      </ul>
+
+
+
+
+                    </div>
+
+
+
                   </div>
                 )
               ) : <></>}

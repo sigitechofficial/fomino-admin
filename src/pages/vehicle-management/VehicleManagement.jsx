@@ -33,6 +33,8 @@ export default function Restaurants() {
   const [addVehicle, setAddVehicle] = useState({
     name: "",
     image: "",
+    baseRate: "",
+    perUnitRate: "",
   });
 
   const [updateVehicle, setUpdateVehicle] = useState({
@@ -67,6 +69,7 @@ export default function Restaurants() {
       perUnitRate,
     });
   };
+  console.log(updateVehicle, "updateVehicle")
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -91,17 +94,23 @@ export default function Restaurants() {
       });
     }
   };
-
+  console.log(addVehicle, "addVehicle")
   const addNewVehicle = async () => {
     if (addVehicle?.name === "") {
       info_toaster("Please Add Vehicle Name");
     } else if (addVehicle?.image === "") {
       info_toaster("Please Add Vehicle Image");
+    } else if (addVehicle?.baseRate === "") {
+      info_toaster("Please Add Base Rate");
+    } else if (addVehicle?.perUnitRate === "") {
+      info_toaster("Please Add Per Unit Rate");
     } else {
       setLoader(true);
       const formData = new FormData();
       formData.append("name", addVehicle?.name);
       formData.append("image", addVehicle?.image);
+      formData.append("baseRate", addVehicle?.baseRate);
+      formData.append("perUnitRate", addVehicle?.perUnitRate);
       let res = await PostAPI("admin/addvehicletype", formData);
       if (res?.data?.status === "1") {
         reFetch();
@@ -127,6 +136,7 @@ export default function Restaurants() {
     formData.append("id", updateVehicle?.id);
     formData.append("baseRate", updateVehicle?.baseRate);
     formData.append("perUnitRate", updateVehicle?.perUnitRate);
+
     let res = await PostAPI("admin/updateVehicleType", formData);
 
     if (res?.data?.status === "1") {
@@ -182,7 +192,18 @@ export default function Restaurants() {
     },
   ];
   const datas = [];
+  const csv = [];
   vehicleData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      logo: "Logo image",
+      name: values?.name,
+      baseRate: values?.baseRate,
+      perUnitRate: values?.perUnitRate,
+      status: values?.status ? "Active" : "InActive",
+      action: values?.status
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -268,7 +289,7 @@ export default function Restaurants() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   <RedButton
@@ -359,6 +380,48 @@ export default function Restaurants() {
                           name="image"
                           id="image"
                           hidden
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label
+                          htmlFor="name"
+                          className="text-black font-switzer font-semibold"
+                        >
+                          Base Rate
+                        </label>
+                        <input
+                          type="text"
+                          name="baseRate"
+                          id="baseRate"
+                          className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
+                          onChange={(e) =>
+                            setAddVehicle({
+                              ...addVehicle,
+                              baseRate: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label
+                          htmlFor="name"
+                          className="text-black font-switzer font-semibold"
+                        >
+                          Per Unit Rate
+                        </label>
+                        <input
+                          type="text"
+                          name="perUnitRate"
+                          id="perUnitRate"
+                          className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
+                          onChange={(e) =>
+                            setAddVehicle({
+                              ...addVehicle,
+                              perUnitRate: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </div>

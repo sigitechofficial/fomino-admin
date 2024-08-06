@@ -53,7 +53,7 @@ export default function EditStore() {
     businessName: "",
     businessEmail: "",
     description: "",
-    countryCode: "",
+    countryCode: "+92",
     phoneNum: "",
     certificateCode: "",
     logo: "",

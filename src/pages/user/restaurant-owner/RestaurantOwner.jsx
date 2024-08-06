@@ -88,7 +88,17 @@ export default function RestaurantOwner() {
   ];
 
   const datas = [];
+  const csv = [];
   ownerData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.user?.id,
+      name: `${values?.user?.firstName} ${values?.user?.lastName}`,
+      email: values?.user?.email,
+      phone: `${values?.user?.countryCode}${values?.user?.phoneNum}`,
+      restaurant: values?.businessName,
+      status: values?.user?.status ? "Active" : "InActive"
+    })
     return datas.push({
       sn: index + 1,
       id: values?.user?.id,
@@ -157,7 +167,7 @@ export default function RestaurantOwner() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
               </div>
             </div>

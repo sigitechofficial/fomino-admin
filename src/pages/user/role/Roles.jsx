@@ -208,7 +208,13 @@ export default function Roles() {
   ];
 
   const datas = [];
+  const csv = [];
   roleData()?.map((values, index) => {
+    csv.push({
+      sn: index + 1,
+      id: values?.id,
+      name: values?.name,
+    })
     return datas.push({
       sn: index + 1,
       id: values?.id,
@@ -240,7 +246,7 @@ export default function Roles() {
                   search={true}
                   searchOnChange={(e) => setSearch(e.target.value)}
                   searchValue={search}
-                  csvdata={datas}
+                  csvdata={csv}
                 />
                 <div className="flex gap-2">
                   <BlackButton

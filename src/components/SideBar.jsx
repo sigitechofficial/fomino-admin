@@ -5,7 +5,7 @@ import {
   MdDashboard,
   MdRestaurant,
   MdTableRestaurant,
-  MdOutlineTableRestaurant ,
+  MdOutlineTableRestaurant,
 } from "react-icons/md";
 import { PiPackage, PiTicket } from "react-icons/pi";
 import { FaPowerOff, FaRegBell, FaUserGear } from "react-icons/fa6";
@@ -13,6 +13,7 @@ import { IoMenu, IoSettings, IoStorefront } from "react-icons/io5";
 import { IoIosCheckbox, IoIosPricetags } from "react-icons/io";
 import { TbWorld } from "react-icons/tb";
 import { GrSend } from "react-icons/gr";
+import { useSocket } from '../utilities/SocketContext';
 import {
   FaAngleDown,
   FaUserEdit,
@@ -23,26 +24,27 @@ import {
   FaUsers,
   FaUserFriends,
   FaCity,
-  FaCogs ,
+  FaCogs,
 } from "react-icons/fa";
 import {
   RiBus2Fill,
   RiCouponLine,
   RiMoneyDollarBoxLine,
   RiUserSettingsFill,
-  RiAddFill 
+  RiAddFill
 } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ListHead from "./ListHead";
 import ListItems from "./ListItems";
 import { info_toaster } from "../utilities/Toaster";
-import { BsCashCoin } from "react-icons/bs";
+import { BsCashCoin, BsFillCartCheckFill } from "react-icons/bs";
 import { SiVectorlogozone } from "react-icons/si";
 
 export default function SideBar() {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const navigate = useNavigate();
   const location = useLocation().pathname;
+  const { disconnectSocket } = useSocket();
 
   useEffect(() => {
     if (
@@ -126,6 +128,7 @@ export default function SideBar() {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userPhoneNo");
     localStorage.removeItem("userName");
+    disconnectSocket();
     navigate("/login");
     info_toaster("Successfully Logged out!");
   };
@@ -205,7 +208,7 @@ export default function SideBar() {
                 title="Drivers"
                 to="/drivers"
                 Icon={FaUserNurse}
-                // active={location === "/user-details"}
+              // active={location === "/user-details"}
               />
               <ListItems
                 title="Staff"
@@ -356,15 +359,15 @@ export default function SideBar() {
                 to="/restaurant/schedule-orders"
                 Icon={IoIosCheckbox}
               />
-               <ListItems
+              <ListItems
                 title="Rejected"
                 to="/restaurant/rejected"
                 Icon={MdCancel}
               />
-                <ListItems
+              <ListItems
                 title="Table Bookings"
                 to="/restaurant/table-booking"
-                Icon={MdOutlineTableRestaurant }
+                Icon={MdOutlineTableRestaurant}
               />
               {/* <ListItems
                 title="Rejected by Store"
@@ -534,10 +537,15 @@ export default function SideBar() {
           to="/front-settings"
           Icon={IoSettings}
         />
-          <ListHead
+        <ListHead
+          title="Current Orders"
+          to="/current-orders"
+          Icon={BsFillCartCheckFill}
+        />
+        <ListHead
           title="Payout Request"
           to="/payout-request"
-          Icon={FaCogs }
+          Icon={FaCogs}
         />
 
         <ListHead
