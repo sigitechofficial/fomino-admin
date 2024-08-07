@@ -1,14 +1,14 @@
 import React, { useState, useContext } from "react";
-import Layout from '../components/Layout'
 import Select from "react-select";
 import { IoMdHome } from "react-icons/io";
 import { MdDirectionsBike } from "react-icons/md";
 import { GoogleMap, LoadScript, Marker, InfoWindow, useJsApiLoader } from "@react-google-maps/api";
-import Loader from "../components/Loader";
-import { ToggleContext } from "../utilities/ContextApi";
+import Loader from "../../components/Loader";
+import { ToggleContext } from "../../utilities/ContextApi";
+import Layout from "../../components/Layout";
 
 
-const Adyen = () => {
+const LiveMap = () => {
     const { isToggled, setIsToggled } = useContext(ToggleContext)
 
 
@@ -187,4 +187,4 @@ const Adyen = () => {
     )
 }
 
-export default Adyen
+export default LiveMap

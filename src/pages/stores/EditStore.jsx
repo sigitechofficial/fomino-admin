@@ -1309,126 +1309,126 @@ export default function EditStore() {
 
                       {(deliveryData?.deliveryTypeId ||
                         data?.data?.deliveryTypeId) !== 2 && (
-                        <>
-                          <div className="space-y-1">
-                            <label
-                              htmlFor="deliveryFeeTypeId"
-                              className="text-black font-switzer font-semibold"
-                            >
-                              Delivery Fee Type Name
-                            </label>
-                            <Select
-                              placeholder="Select"
-                              defaultValue={{
-                                value:
-                                  data?.data?.deliveryData?.deliveryFeeTypeId,
-                                label:
-                                  data?.data?.deliveryData?.deliveryFeeTypeName,
-                              }}
-                              name="deliveryFeeTypeId"
-                              options={deliveryFeeOptions}
-                              onChange={(e) =>
-                                setDeliveryData({
-                                  ...deliveryData,
-                                  deliveryFeeTypeId: e?.value,
-                                })
-                              }
-                            />
-                          </div>
-
-                          {(deliveryData?.deliveryFeeTypeId ||
-                            data?.data?.deliveryFeeTypeId) === 1 ? (
+                          <>
                             <div className="space-y-1">
                               <label
-                                htmlFor="deliveryFeeFixed"
+                                htmlFor="deliveryFeeTypeId"
                                 className="text-black font-switzer font-semibold"
                               >
-                                Delivery Fee
+                                Delivery Fee Type Name
                               </label>
-                              <input
-                                value={deliveryData?.deliveryFeeFixed}
-                                onChange={handleOnEventChange}
-                                type="number"
-                                name="deliveryFeeFixed"
-                                id="deliveryFeeFixed"
-                                className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
+                              <Select
+                                placeholder="Select"
+                                defaultValue={{
+                                  value:
+                                    data?.data?.deliveryData?.deliveryFeeTypeId,
+                                  label:
+                                    data?.data?.deliveryData?.deliveryFeeTypeName,
+                                }}
+                                name="deliveryFeeTypeId"
+                                options={deliveryFeeOptions}
+                                onChange={(e) =>
+                                  setDeliveryData({
+                                    ...deliveryData,
+                                    deliveryFeeTypeId: e?.value,
+                                  })
+                                }
                               />
                             </div>
-                          ) : (
-                            <>
-                              <div className="grid grid-cols-2 gap-5">
-                                <div className="space-y-1">
-                                  <label
-                                    htmlFor="baseCharge"
-                                    className="text-black font-switzer font-semibold"
-                                  >
-                                    Base Charges
-                                  </label>
-                                  <input
-                                    value={deliveryData?.baseCharge}
-                                    onChange={handleOnEventChange}
-                                    type="number"
-                                    name="baseCharge"
-                                    id="baseCharge"
-                                    className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
-                                  />
-                                </div>
-                                <div className="space-y-1">
-                                  <label
-                                    htmlFor="baseDistance"
-                                    className="text-black font-switzer font-semibold"
-                                  >
-                                    Base Distance
-                                  </label>
-                                  <input
-                                    value={deliveryData?.baseDistance}
-                                    onChange={handleOnEventChange}
-                                    type="number"
-                                    name="baseDistance"
-                                    id="baseDistance"
-                                    className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
-                                  />
-                                </div>
-                              </div>
 
-                              <div className="grid grid-cols-2 gap-5">
-                                <div className="space-y-1">
-                                  <label
-                                    htmlFor="chargePerExtraUnit"
-                                    className="text-black font-switzer font-semibold"
-                                  >
-                                    Charges per Extra Unit
-                                  </label>
-                                  <input
-                                    value={deliveryData?.chargePerExtraUnit}
-                                    onChange={handleOnEventChange}
-                                    type="number"
-                                    name="chargePerExtraUnit"
-                                    id="chargePerExtraUnit"
-                                    className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
-                                  />
-                                </div>
-                                <div className="space-y-1">
-                                  <label
-                                    htmlFor="extraUnitDistance"
-                                    className="text-black font-switzer font-semibold"
-                                  >
-                                    Extar Unit Distance
-                                  </label>
-                                  <input
-                                    value={deliveryData?.extraUnitDistance}
-                                    onChange={handleOnEventChange}
-                                    type="number"
-                                    name="extraUnitDistance"
-                                    id="extraUnitDistance"
-                                    className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
-                                  />
-                                </div>
+                            {(deliveryData?.deliveryFeeTypeId ||
+                              data?.data?.deliveryFeeTypeId) === 1 ? (
+                              <div className="space-y-1">
+                                <label
+                                  htmlFor="deliveryFeeFixed"
+                                  className="text-black font-switzer font-semibold"
+                                >
+                                  Delivery Fee
+                                </label>
+                                <input
+                                  value={deliveryData?.deliveryFeeFixed}
+                                  onChange={handleOnEventChange}
+                                  type="number"
+                                  name="deliveryFeeFixed"
+                                  id="deliveryFeeFixed"
+                                  className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
+                                />
                               </div>
-                            </>
-                          )}
-                        </>
-                      )}
+                            ) : (
+                              <>
+                                <div className="grid grid-cols-2 gap-5">
+                                  <div className="space-y-1">
+                                    <label
+                                      htmlFor="baseCharge"
+                                      className="text-black font-switzer font-semibold"
+                                    >
+                                      Base Charges
+                                    </label>
+                                    <input
+                                      value={deliveryData?.baseCharge}
+                                      onChange={handleOnEventChange}
+                                      type="number"
+                                      name="baseCharge"
+                                      id="baseCharge"
+                                      className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label
+                                      htmlFor="baseDistance"
+                                      className="text-black font-switzer font-semibold"
+                                    >
+                                      Base Distance
+                                    </label>
+                                    <input
+                                      value={deliveryData?.baseDistance}
+                                      onChange={handleOnEventChange}
+                                      type="number"
+                                      name="baseDistance"
+                                      id="baseDistance"
+                                      className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
+                                    />
+                                  </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-5">
+                                  <div className="space-y-1">
+                                    <label
+                                      htmlFor="chargePerExtraUnit"
+                                      className="text-black font-switzer font-semibold"
+                                    >
+                                      Charges per Extra Unit
+                                    </label>
+                                    <input
+                                      value={deliveryData?.chargePerExtraUnit}
+                                      onChange={handleOnEventChange}
+                                      type="number"
+                                      name="chargePerExtraUnit"
+                                      id="chargePerExtraUnit"
+                                      className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label
+                                      htmlFor="extraUnitDistance"
+                                      className="text-black font-switzer font-semibold"
+                                    >
+                                      Extar Unit Distance
+                                    </label>
+                                    <input
+                                      value={deliveryData?.extraUnitDistance}
+                                      onChange={handleOnEventChange}
+                                      type="number"
+                                      name="extraUnitDistance"
+                                      id="extraUnitDistance"
+                                      className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
+                                    />
+                                  </div>
+                                </div>
+                              </>
+                            )}
+                          </>
+                        )}
 
                       <div className="flex items-center gap-2 col-span-2 justify-end">
                         <BlackButton text="Update" onClick={updateDelivery} />

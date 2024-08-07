@@ -124,7 +124,7 @@ export default function Stores() {
       city: values?.city,
       ownerName: values?.ownerName,
       operatingTime: values?.operatingTime,
-      // joinedAt: values?.joinedAt,
+      joinedAt: values?.joinedAt.split("/").join("--"),
       status: values?.status ? "Active" : "InActive",
       action: values?.status,
     })

@@ -96,7 +96,7 @@ export default function UpdateZone() {
   const closePolygon = (coord1, coord2) => {
     const distance = Math.sqrt(
       Math.pow(coord1.lat - coord2.lat, 2) +
-        Math.pow(coord1.lng - coord2.lng, 2)
+      Math.pow(coord1.lng - coord2.lng, 2)
     );
     return distance < 0.001;
   };

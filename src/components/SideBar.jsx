@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   MdAddBox,
   MdCancel,
@@ -25,6 +25,7 @@ import {
   FaUserFriends,
   FaCity,
   FaCogs,
+  FaMapMarkedAlt,
 } from "react-icons/fa";
 import {
   RiBus2Fill,
@@ -39,8 +40,10 @@ import ListItems from "./ListItems";
 import { info_toaster } from "../utilities/Toaster";
 import { BsCashCoin, BsFillCartCheckFill } from "react-icons/bs";
 import { SiVectorlogozone } from "react-icons/si";
+import { ToggleContext } from "../utilities/ContextApi";
 
 export default function SideBar() {
+  const { isToggled, setIsToggled } = useContext(ToggleContext);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const navigate = useNavigate();
   const location = useLocation().pathname;
@@ -135,10 +138,10 @@ export default function SideBar() {
 
   return (
     <nav
-      className="w-[280px] float-left fixed h-full flex bg-theme flex-col justify-between
-      border-r-[1.5px] border-r-themeBorder"
+      className={`${isToggled ? "hidden" : "w-[280px]"}  float-left fixed h-full flex bg-theme flex-col justify-between
+      border-r-[1.5px] border-r-themeBorder`}
     >
-      <div className="flex justify-center col-span-2 border-b-[1.5px] border-b-themeBorder py-2.5 px-10">
+      <div className={` flex justify-center col-span-2 border-b-[1.5px] border-b-themeBorder py-2.5 px-10`}>
         <Link to="/">
           <img
             src="/images/logo.webp"
@@ -172,7 +175,8 @@ export default function SideBar() {
             location === "/store-owners" ||
             location === "/drivers" ||
             location === "/employees" ||
-            location === "/permissions"
+            location === "/permissions" ||
+            location === "/roles"
           }
           Angle={isDropdownActive("user") ? FaAngleUp : FaAngleDown}
           onClick={() => handleActive("user")}
@@ -232,7 +236,7 @@ export default function SideBar() {
           Icon={MdTableRestaurant}
           active={
             location === "/restaurant/add-on-collections" ||
-            // location === "/restaurant/add-on" ||
+            location === "/restaurant/add-on" ||
             location === "/restaurant/menu-categories" ||
             location === "/restaurant/cuisines" ||
             location === "/restaurant/products"
@@ -329,7 +333,9 @@ export default function SideBar() {
             location === "/restaurant/delivered-orders" ||
             location === "/restaurant/cancelled-orders" ||
             location === "/restaurant/schedule-orders" ||
-            location === "/order-details"
+            location === "/order-details" ||
+            location === "/rejected" ||
+            location === "/table-booking"
           }
           Angle={
             isDropdownActive("Restaurant Orders") ? FaAngleUp : FaAngleDown
@@ -387,7 +393,8 @@ export default function SideBar() {
             location === "/store/delivered-orders" ||
             location === "/store/cancelled-orders" ||
             location === "/store/schedule-orders" ||
-            location === "/order-details"
+            location === "/order-details" ||
+            location === "/store-rejected"
           }
           Angle={isDropdownActive("Store Orders") ? FaAngleUp : FaAngleDown}
           onClick={() => handleActive("Store Orders")}
@@ -471,11 +478,11 @@ export default function SideBar() {
         {isDropdownActive("Earnings") && (
           <>
             <div className="m-2 relative space-y-1">
-              {/* <ListItems
+              <ListItems
                 title="Overall Earnings"
                 to="/overall-earnings"
                 Icon={RiMoneyDollarBoxLine}
-              /> */}
+              />
               <ListItems
                 title="Admin Earnings"
                 to="/admin-earnings"
@@ -523,6 +530,7 @@ export default function SideBar() {
           to="/all-stores"
           Icon={IoStorefront}
         />
+        <ListHead title="Live Map" to="/live-map" Icon={FaMapMarkedAlt} />
         <ListHead title="Countries" to="/all-countries" Icon={TbWorld} />
         <ListHead title="Cities" to="/all-cities" Icon={FaCity} />
 

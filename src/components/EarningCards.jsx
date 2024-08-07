@@ -9,7 +9,7 @@ export default function EarningCards(props) {
         </div>
 
         <div className="text-xl font-semibold font-switzer">
-          ${props?.earning ? props?.earning.toFixed(2) : "0.00"}
+          CHF {props?.earning ? props?.earning.toFixed(2) : "0.00"}
         </div>
       </div>
     </div>

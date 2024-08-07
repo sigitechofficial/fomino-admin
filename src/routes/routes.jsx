@@ -113,6 +113,9 @@ const Stores = lazy(() => import("../pages/stores/Stores"));
 const EditStore = lazy(() => import("../pages/stores/EditStore"));
 const AddStore = lazy(() => import("../pages/stores/AddStore"));
 
+//Live Map
+const LiveMap = lazy(() => import("../pages/live-map/LiveMap"));
+
 // All Countries
 const Countries = lazy(() => import("../pages/country/Countries"));
 
@@ -141,6 +144,7 @@ const RestaurantEarnings = lazy(() =>
   import("../pages/earnings/RestaurantEarnings")
 );
 const StoreEarnings = lazy(() => import("../pages/earnings/StoreEarnings"));
+const OverAllEarning = lazy(() => import("../pages/earnings/OverallEarnings"));
 
 // Front Settings
 const FrontSettings = lazy(() =>
@@ -385,7 +389,11 @@ const coreRoutes = [
     path: "/add-store",
     component: AddStore,
   },
-
+ // Live Map
+ {
+  path: "/live-map",
+  component: LiveMap,
+},
 
   // All Countries
   {
@@ -414,6 +422,10 @@ const coreRoutes = [
   },
 
   // Earnings
+  {
+    path: "/overall-earnings",
+    component: OverAllEarning,
+  },
   {
     path: "/admin-earnings",
     component: AdminEarnings,

@@ -36,7 +36,7 @@ export default function EditRestaurants() {
 
   const deliveryType = GetAPI("admin/activedeliverytype");
   const [tab, setTab] = useState("General");
-  const [li, setLi] = useState("");
+  const [array, setArray] = useState([]);
   const [liToggle, setLiToggle] = useState(false);
   const [search, setSearch] = useState("");
   const [loader, setLoader] = useState(false);
@@ -490,6 +490,23 @@ export default function EditRestaurants() {
       ),
     })),
   }));
+
+  // =========Handle button click================
+
+
+  const handleButtonClick = (str) => {
+    setArray((prevArray) => {
+      let newArray;
+      if (prevArray.includes(str)) {
+        newArray = prevArray.filter((item) => item !== str);
+      } else {
+        newArray = [...prevArray, str];
+      }
+      return newArray;
+    });
+  };
+
+  // =========================
 
   return data?.length === 0 ? (
     <Loader />
@@ -1117,7 +1134,7 @@ export default function EditRestaurants() {
                                 <div>
                                   <h4 className="font-semibold text-2xl">{elem?.name}</h4>
                                   {console.log(elem?.productCollections?.map(itm => itm?.collection?.id, "check data"))}
-                                  <p className="text-gray-500">{elem?.productCollections?.map(itm => itm?.collection?.collectionAddons[0]?.name)}</p>
+                                  {/* <p className="text-gray-500">{elem?.productCollections?.map(itm => itm?.collection?.collectionAddons[0]?.name)}</p> */}
                                   <h4 className="text-xl font-semibold">{elem.originalPrice ? "CHF" + elem?.originalPrice : "N/A"}</h4>
                                 </div>
                               </div>
@@ -1618,9 +1635,11 @@ export default function EditRestaurants() {
                     <div className="w-1/2 text-white font-semibold text-lg">
                       <ul>
                         <li className="bg-themeRed py-2"> <div className="flex justify-between cursor-pointer px-4 text-xl font-bold"><p>Restaurant Status Management</p> <p>Status</p></div></li>
-                        <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4" onClick={() => { setLi("Open"); setLiToggle(prev => prev = !prev) }} ><p>Open</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${liToggle && li === "Open" ? "rotate-180" : ""}`} size={29} /></div>
+                        <li className="bg-[#1e1b1b] py-2 cursor-pointer"> <div className="flex justify-between px-4" onClick={() => {
+                          handleButtonClick("Open");
+                        }} ><p>Open</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${array.includes("Open") ? "rotate-180" : ""}`} size={29} /></div>
                         </li>
-                        <ul className={`${liToggle && li === "Open" ? "block" : "hidden"} text-sm text-gray-300`}>
+                        <ul className={`${array.includes("Open") ? "block" : "hidden"} text-sm text-gray-300`}>
 
                           <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><p>The restaurant is accepting standard pickup orders</p>   <Switch
                             checked={data?.data?.configuration?.isOpen_pickupOrders}
@@ -1680,10 +1699,12 @@ export default function EditRestaurants() {
                             height={20}
                           /></div></li>
                         </ul>
-                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer" onClick={() => { setLi("Close"); setLiToggle(prev => prev = !prev) }} > <div className="flex justify-between px-4"><p>Close</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${liToggle && li === "Close" ? "rotate-180" : ""}`} size={29} /></div>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer" onClick={() => {
+                          handleButtonClick("Close");
+                        }} > <div className="flex justify-between px-4"><p>Close</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${array.includes("Close") ? "rotate-180" : ""}`} size={29} /></div>
 
                         </li>
-                        <ul className={`${liToggle && li === "Close" ? "block" : "hidden"} text-sm text-gray-300`}>
+                        <ul className={`${array.includes("Close") ? "block" : "hidden"} text-sm text-gray-300`}>
                           <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><p>The restaurant is accepting schedule pickup orders</p>   <Switch
                             checked={data?.data?.configuration?.isClose_schedule_pickupOrders}
                             onChange={(checked) =>
@@ -1713,11 +1734,13 @@ export default function EditRestaurants() {
                             height={20}
                           /></div></li>
                         </ul>
-                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer" onClick={() => { setLi("Temporary Closed"); setLiToggle(prev => prev = !prev) }} > <div className="flex justify-between px-4"><p>Temporary Closed</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${liToggle && li === "Temporary Closed" ? "rotate-180" : ""}`} size={29} /></div>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer" onClick={() => {
+                          handleButtonClick("Temporary Closed");
+                        }} > <div className="flex justify-between px-4"><p>Temporary Closed</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${array.includes("Temporary Closed") ? "rotate-180" : ""}`} size={29} /></div>
 
 
                         </li>
-                        <ul className={`${liToggle && li === "Temporary Closed" ? "block" : "hidden"} text-sm text-gray-300`}>
+                        <ul className={`${array.includes("Temporary Closed") ? "block" : "hidden"} text-sm text-gray-300`}>
                           <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting pickup orders</p>   <Switch
                             checked={data?.data?.configuration?.temporaryClose_pickupOrders}
                             onChange={(checked) =>
@@ -1761,11 +1784,13 @@ export default function EditRestaurants() {
                             height={20}
                           /></div></li>
                         </ul>
-                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer" onClick={() => { setLi("Rush Mode"); setLiToggle(prev => prev = !prev) }} > <div className="flex justify-between px-4"><p>Rush Mode</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${liToggle && li === "Rush Mode" ? "rotate-180" : ""}`} size={29} /></div>
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer" onClick={() => {
+                          handleButtonClick("Rush Mode");
+                        }} > <div className="flex justify-between px-4"><p>Rush Mode</p> <MdOutlineKeyboardArrowDown className={`duration-200 ${array.includes("Rush Mode") ? "rotate-180" : ""}`} size={29} /></div>
 
 
                         </li>
-                        <ul className={`${liToggle && li === "Rush Mode" ? "block" : "hidden"} text-sm text-gray-300`}>
+                        <ul className={`${array.includes("Rush Mode") ? "block" : "hidden"} text-sm text-gray-300`}>
                           <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4  items-center"><p>The restaurant is accepting standard pickup orders</p>   <Switch
                             checked={data?.data?.configuration?.isRushMode_pickupOrders}
                             onChange={(checked) =>
@@ -1827,7 +1852,7 @@ export default function EditRestaurants() {
                       <ul>
                         <li className="bg-themeRed py-2"> <div className="flex justify-between px-4 cursor-pointer text-xl font-bold"><p>Additional Functions</p> <p>Status</p>
                         </div></li>
-                        <li className="bg-[#1e1b1b] py-2"> <div className="flex justify-between px-4 cursor-pointer items-center"> <div><p> Delivery &#40; Delivery by Fomino &#41;</p><p className="text-sm text-gray-300">Activate this option to allow delivery by other users</p> </div>  <Switch
+                        <li className="bg-[#1e1b1b] py-2"> <div className="flex justify-between px-4 cursor-pointer items-center"> <div><p> Delivery &#40;Delivery by Fomino&#41;</p><p className="text-sm text-gray-300">Activate this option to allow delivery by other users</p> </div>  <Switch
                           checked={data?.data?.configuration?.delivery}
                           onChange={(checked) =>
                             handleSwitchConfigChange(checked, "delivery")
@@ -1887,7 +1912,7 @@ export default function EditRestaurants() {
                           height={20}
                         />
                         </div></li>
-                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div><p>Payment &#10629; Cash &#10630;</p><p className="text-sm text-gray-300">Enable or disable cash payment services</p> </div>   <Switch
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div><p>Payment &#40;Cash&#41;</p><p className="text-sm text-gray-300">Enable or disable cash payment services</p> </div>   <Switch
                           checked={data?.data?.configuration?.cod}
                           onChange={(checked) =>
                             handleSwitchConfigChange(checked, "cod")
@@ -1902,7 +1927,7 @@ export default function EditRestaurants() {
                           height={20}
                         />
                         </div></li>
-                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div> <p>Currency &#10629; Euro &#10630; </p><p className="text-sm text-gray-300">Accept or decline cash Euro currency</p> </div> <Switch
+                        <li className="bg-[#1e1b1b] py-2 border-gray-500 border-t-[2px] cursor-pointer"> <div className="flex justify-between px-4 items-center"><div> <p>Currency &#40;Euro&#41; </p><p className="text-sm text-gray-300">Accept or decline cash Euro currency</p> </div> <Switch
                           checked={data?.data?.configuration?.euro}
                           onChange={(checked) =>
                             handleSwitchConfigChange(checked, "euro")

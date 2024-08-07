@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Drivers() {
   const { data, reFetch } = GetAPI("admin/alldrivers");
+  console.log("🚀 ~ Drivers ~ data:", data)
   const [modal, setModal] = useState(false);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();

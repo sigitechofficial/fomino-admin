@@ -117,7 +117,7 @@ export default function Restaurants() {
       city: values?.city,
       ownerName: values?.ownerName,
       operatingTime: values?.operatingTime,
-      joinedAt: values?.joinedAt ? values?.joinedAt: "",
+      joinedAt: values?.joinedAt.split("/").join("--") ,
       status: values?.status ? "Active" : "InActive",
     })
     return datas.push({
