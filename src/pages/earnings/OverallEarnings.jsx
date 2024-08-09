@@ -5,7 +5,8 @@ import EarningCards from "../../components/EarningCards";
 import Loader from "../../components/Loader";
 
 export default function OverallEarnings() {
-  const { data } = GetAPI("admin/all_earnings");
+  const { data } = GetAPI("admin/overAllEarning");
+  console.log("🚀 ~ OverallEarnings ~ data:", data)
 
   return data.length === 0 ? (
     <Loader />

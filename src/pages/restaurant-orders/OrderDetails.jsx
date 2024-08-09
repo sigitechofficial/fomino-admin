@@ -105,7 +105,7 @@ export default function OrderDetails() {
                         <div className="font-medium text-themeBorderGray text-sm mt-2z` w-full" >{items?.orderAddOns.length > 0 ? items?.orderAddOns?.map((item, idx) => {
                           return (
 
-                            <div className="flex flex-wrap"><div className="font-bold">{item?.category?.name}</div>: &nbsp; {data?.productList[index]?.addOnArr[idx]?.addons?.map(item => <div>{`${item?.name},`}&nbsp;</div>)}</div>
+                            <div className="flex flex-wrap"><div className="font-bold">{item?.category?.name}</div>: &nbsp;  <div>{item?.name ? item?.name : "No AddOn"}&nbsp;</div></div>
                           )
                         }) : "No addOns from backend"}</div>
 
@@ -114,34 +114,31 @@ export default function OrderDetails() {
                         <p className="font-bold text-xl ">CHF {items?.total}</p>
                       </div>
                     </div>
-
-
-
-                    <div className="flex justify-between text-lg font-medium text-themeBorderGray mt-6">
-                      <div className="flex justify-between w-1/3">
-                        <div className="flex flex-col gap-2">
-                          <p>Subtotal</p>
-                          <p>Delivery Fee</p>
-                          <p>Service Charge</p>
-                          {data?.orderCharge?.packingFee.includes("0.00") || data?.orderCharge?.packingFee.includes("0") || (!data?.orderCharge?.packingFee) ? "" : <p>Packing Fee</p>}
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                          <p>{data?.orderItems?.length === 1 ? <div>{data?.orderItems?.length} Item</div> : <div>{data?.orderItems?.length} Items</div>}</p>
-                          <p>{""}</p>
-                          <p>{""}</p>
-                        </div>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <p>{data?.subTotal ? `CHF ${data?.subTotal}` : "N/A"}</p>
-                        <p>{data?.orderCharge?.deliveryFees ? `CHF ${data?.orderCharge?.deliveryFees}` : "N/A"}</p>
-                        <p>{data?.orderCharge?.serviceCharges ? `CHF ${data?.orderCharge?.serviceCharges}` : "N/A"} </p>
-                        <p>{data?.orderCharge?.packingFee === "0" || (!data?.orderDetails?.orderCharge?.packingFee) ? "" : `CHF ${data?.orderCharge?.packingFee}`}</p>
-                      </div>
-                    </div>
                   </>
-
                 ))}
+
+                <div className="flex justify-between text-lg font-medium text-themeBorderGray mt-6">
+                  <div className="flex justify-between w-1/3">
+                    <div className="flex flex-col gap-2">
+                      <p>Subtotal</p>
+                      <p>Delivery Fee</p>
+                      <p>Service Charge</p>
+                      {data?.orderCharge?.packingFee.includes("0.00") || data?.orderCharge?.packingFee.includes("0") || (!data?.orderCharge?.packingFee) ? "" : <p>Packing Fee</p>}
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <p>{data?.orderItems?.length === 1 ? <div>{data?.orderItems?.length} Item</div> : <div>{data?.orderItems?.length} Items</div>}</p>
+                      <p>{""}</p>
+                      <p>{""}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <p>{data?.subTotal ? `CHF ${data?.subTotal}` : "N/A"}</p>
+                    <p>{data?.orderCharge?.deliveryFees ? `CHF ${data?.orderCharge?.deliveryFees}` : "N/A"}</p>
+                    <p>{data?.orderCharge?.serviceCharges ? `CHF ${data?.orderCharge?.serviceCharges}` : "N/A"} </p>
+                    <p>{data?.orderCharge?.packingFee === "0" || (!data?.orderDetails?.orderCharge?.packingFee) ? "" : `CHF ${data?.orderCharge?.packingFee}`}</p>
+                  </div>
+                </div>
 
 
 

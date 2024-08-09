@@ -7,7 +7,7 @@ import { ToggleContext } from "../utilities/ContextApi";
 export default function Header() {
   const { isToggled } = useContext(ToggleContext);
   return (
-    <header className={`${isToggled ? "w-[calc(100%)] ml-0" : ""} w-[calc(100%-280px)] ml-[280px] bg-theme border-b border-themeLightGray fixed z-40`}>
+    <header className={`${isToggled ? "w-[calc(100%)] ml-0" : "w-[calc(100%-280px)] ml-[280px]"}  bg-theme border-b border-themeLightGray fixed z-40`}>
       <div className="col-span-7 py-[9px] px-10 flex justify-end items-center gap-x-5">
         <div>
           <FaRegBell size={26} color="white" />
