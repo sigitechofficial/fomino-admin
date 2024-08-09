@@ -41,8 +41,8 @@ export default function StoreAddOnCollections() {
   const columns = [
     { field: "sn", header: "Serial. No" },
     {
-      field: "resName",
-      header: "Restaurant Name",
+      field: "storeName",
+      header: "Store",
     },
 
     {
@@ -60,7 +60,7 @@ export default function StoreAddOnCollections() {
   addOnCollectionData()?.map((values, index) => {
     csv.push({
       sn: index + 1,
-      resName: values?.title,
+      storeName: values?.title,
       minAllowed: values?.minAllowed,
       maxAllowed: values?.maxAllowed,
       status: values?.status ? "Active" : "InActive",
@@ -68,7 +68,7 @@ export default function StoreAddOnCollections() {
     })
     return datas.push({
       sn: index + 1,
-      resName: values?.title,
+      storeName: values?.title,
       // minAllowed: values?.minAllowed,
       // maxAllowed: values?.maxAllowed,
       status: (

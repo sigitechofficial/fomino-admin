@@ -65,7 +65,7 @@ export default function OrderDetails() {
             <div className="w-full flex gap-x-16">
               <div className="w-[55%]">
                 <div className="flex justify-between">
-                  <h4 className="font-medium text-xl flex items-center">Order#<span className="font-medium text-base text-themeBorderGray">{data?.orderDetails?.orderNum ? data?.orderDetails?.orderNum : "N/A"}</span></h4>
+                  <h4 className="font-medium text-xl flex items-center">Order#<span className="font-medium text-base text-themeBorderGray">{data?.orderNum ? data?.orderNum : "N/A"}</span></h4>
                   <div className="flex gap-3">
                     <button
                       className="flex items-center gap-1 font-medium border border-gray-300 rounded-md px-2 py-1.5 h-9 hover:bg-theme hover:text-white duration-100"
@@ -81,71 +81,75 @@ export default function OrderDetails() {
                     </button>                  </div>
                 </div>
                 <div className="mt-5 flex flex-col gap-3">
-                  <div className="flex"><p className="font-medium text-themeBorderGray">Order Date:&nbsp;</p> <p className="font-medium">{data?.orderDetails?.createdAt
-                    ? dayjs(data?.orderDetails?.createdAt).format("DD-MM-YYYY")
+                  <div className="flex"><p className="font-medium text-themeBorderGray">Order Date:&nbsp;</p> <p className="font-medium">{data?.createdAt
+                    ? dayjs(data?.createdAt).format("DD-MM-YYYY")
                     : "N/A"}</p></div>
-                  <div className="flex"><p className="font-medium text-themeBorderGray">Time&nbsp;</p> <p className="font-medium">{data?.orderDetails?.createdAt
-                    ? dayjs(data?.orderDetails?.createdAt).format("h:mm:ss A")
+                  <div className="flex"><p className="font-medium text-themeBorderGray">Time&nbsp;</p> <p className="font-medium">{data?.createdAt
+                    ? dayjs(data?.createdAt).format("h:mm:ss A")
                     : "N/A"}</p></div>
-                  <div className="flex"><p className="font-medium text-themeBorderGray">Payment Method:&nbsp;</p> <p className="font-medium">{data?.orderDetails?.paymentMethod ? data?.orderDetails?.paymentMethod.name : "N/A"}</p></div>
-                  <div className="flex"><p className="font-medium text-themeBorderGray">Payment Status:&nbsp;</p> <p> {data?.orderDetails?.orderStatus?.name ==="Reject" || data?.orderDetails?.orderStatus?.name ==="Cancelled"   ? <div className="font-medium px-3 bg-gray-500 rounded-md text-white">void</div> : (data?.orderDetails?.paymentRecieved ? <div className="font-medium px-3 bg-green-500 rounded-md text-red-600">Paid</div>:<div className="font-medium px-3 bg-red-200 rounded-md text-red-600">Unpaid</div>)}</p></div>
-                  <div className="flex"><p className="font-medium text-themeBorderGray">Order Type:&nbsp;</p> <p className="font-medium px-3 bg-gray-200 rounded-md text-red-600">{data?.orderDetails?.orderType.type ? data?.orderDetails?.orderType.type : "N/A"}</p></div>
+                  <div className="flex"><p className="font-medium text-themeBorderGray">Payment Method:&nbsp;</p> <p className="font-medium">{data?.paymentMethod ? data?.paymentMethod.name : "N/A"}</p></div>
+                  <div className="flex"><p className="font-medium text-themeBorderGray">Payment Status:&nbsp;</p> <p> {data?.orderStatus?.name === "Reject" || data?.orderStatus?.name === "Cancelled" ? <div className="font-medium px-3 bg-gray-500 rounded-md text-white">void</div> : (data?.paymentRecieved ? <div className="font-medium px-3 bg-green-500 rounded-md text-red-600">Paid</div> : <div className="font-medium px-3 bg-red-200 rounded-md text-red-600">Unpaid</div>)}</p></div>
+                  <div className="flex"><p className="font-medium text-themeBorderGray">Order Type:&nbsp;</p> <p className="font-medium px-3 bg-gray-200 rounded-md text-red-600">{data?.orderType.type ? data?.orderType.type : "N/A"}</p></div>
                 </div>
                 <hr className="bg-gray-300 h-[1px] my-5" />
 
-                {data?.orderDetails?.orderItems.map((items, index) => (
+                {data?.orderItems.map((items, index) => (
                   <>
                     <div className="flex gap-3 mt-6">
                       <div className="flex">
-                        <img className="w-[200px] h-[120px] rounded-md object-cover shrink-0" src={`${BASE_URL}${data?.productList[index]?.image}`} alt="image" />
+                        <img className="w-[200px] h-[120px] rounded-md object-cover shrink-0" src={`${BASE_URL}${items?.R_PLink?.image}`} alt="image" />
 
                       </div>
                       <div className="">
-                        <h4 className="font-bold text-xl ">{items?.quantity}x {data?.productList[index]?.name}</h4>
-                        <div className="font-medium text-themeBorderGray text-sm mt-2z` w-full" >{data?.productList[index]?.addOnArr?.map((item, idx) => {
+                        <h4 className="font-bold text-xl ">{items?.quantity}x {items?.R_PLink?.name}</h4>
+                        <div className="font-medium text-themeBorderGray text-sm mt-2z` w-full" >{items?.orderAddOns.length > 0 ? items?.orderAddOns?.map((item, idx) => {
                           return (
+
                             <div className="flex flex-wrap"><div className="font-bold">{item?.category?.name}</div>: &nbsp; {data?.productList[index]?.addOnArr[idx]?.addons?.map(item => <div>{`${item?.name},`}&nbsp;</div>)}</div>
                           )
-                        })}</div>
+                        }) : "No addOns from backend"}</div>
 
                       </div>
                       <div className="flex-1 text-end">
-                        <p className="font-bold text-xl ">{data?.productList[index]?.currencySign} {items?.total}</p>
+                        <p className="font-bold text-xl ">CHF {items?.total}</p>
                       </div>
                     </div>
 
 
-                  </>
-                ))}
-                <div className="flex justify-between text-lg font-medium text-themeBorderGray mt-6">
-                  <div className="flex justify-between w-1/3">
-                    <div className="flex flex-col gap-2">
-                      <p>Subtotal</p>
-                      <p>Delivery Fee</p>
-                      <p>Service Charge</p>
-                      {data?.orderDetails?.orderCharge?.packingFee === "0" || (!data?.orderDetails?.orderCharge?.packingFee) ? "" : <p>Packing Fee</p>}
-                    </div>
 
-                    <div className="flex flex-col gap-2">
-                      <p>{data?.orderDetails?.orderItems?.length === 1 ? <div>{data?.orderDetails?.orderItems?.length} Item</div> : <div>{data?.orderDetails?.orderItems?.length} Items</div>}</p>
-                      <p>{""}</p>
-                      <p>{""}</p>
+                    <div className="flex justify-between text-lg font-medium text-themeBorderGray mt-6">
+                      <div className="flex justify-between w-1/3">
+                        <div className="flex flex-col gap-2">
+                          <p>Subtotal</p>
+                          <p>Delivery Fee</p>
+                          <p>Service Charge</p>
+                          {data?.orderCharge?.packingFee.includes("0.00") || data?.orderCharge?.packingFee.includes("0") || (!data?.orderCharge?.packingFee) ? "" : <p>Packing Fee</p>}
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <p>{data?.orderItems?.length === 1 ? <div>{data?.orderItems?.length} Item</div> : <div>{data?.orderItems?.length} Items</div>}</p>
+                          <p>{""}</p>
+                          <p>{""}</p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <p>{data?.subTotal ? `CHF ${data?.subTotal}` : "N/A"}</p>
+                        <p>{data?.orderCharge?.deliveryFees ? `CHF ${data?.orderCharge?.deliveryFees}` : "N/A"}</p>
+                        <p>{data?.orderCharge?.serviceCharges ? `CHF ${data?.orderCharge?.serviceCharges}` : "N/A"} </p>
+                        <p>{data?.orderCharge?.packingFee === "0" || (!data?.orderDetails?.orderCharge?.packingFee) ? "" : `CHF ${data?.orderCharge?.packingFee}`}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <p>{data?.orderDetails?.subTotal ? `${data?.productList[0]?.currencySign} ${data?.orderDetails?.subTotal}` : "N/A"}</p>
-                    <p>{data?.orderDetails?.orderCharge?.deliveryFees ? `${data?.productList[0]?.currencySign} ${data?.orderDetails?.orderCharge?.deliveryFees}` : "N/A"}</p>
-                    <p>{data?.orderDetails?.orderCharge?.serviceCharges ? `${data?.productList[0]?.currencySign} ${data?.orderDetails?.orderCharge?.serviceCharges}` : "N/A"} </p>
-                    <p>{data?.orderDetails?.orderCharge?.packingFee === "0" || (!data?.orderDetails?.orderCharge?.packingFee) ? "" : `${data?.productList[0]?.currencySign} ${data?.orderDetails?.orderCharge?.packingFee}`}</p>
-                  </div>
-                </div>
+                  </>
+
+                ))}
+
 
 
                 <hr className="bg-gray-300 h-[1px] my-2" />
                 <div className="font-bold text-xl flex justify-between mt-2">
-                  <p>Total</p><p>{data?.productList[0]?.currencySign} {data?.orderDetails?.total}</p>
+                  <p>Total</p><p>CHF {data?.total}</p>
                 </div>
-              
+
                 {/* <div className="font-bold text-xl flex justify-between">
                   <p className="font-medium text-themeBorderGray">Paid by customer</p><p>N/A</p>
                 </div> */}
@@ -161,7 +165,7 @@ export default function OrderDetails() {
                 </div>
 
                 <div className="space-y-4 pl-3 min-h-[135px] ">
-                  {data?.orderDetails?.orderHistories?.map((his, ind) => (
+                  {data?.orderHistories?.map((his, ind) => (
                     <div className="flex items-center mt-6">
                       <div className="flex justify-center items-center font-semibold w-8 h-[30px] bg-themeRed rounded-full text-white -mt-5">
                         <FaCheck />
@@ -180,19 +184,19 @@ export default function OrderDetails() {
 
 
 
-                {data?.orderDetails?.DriverId && <div className="flex justify-between pr-4 mt-10">
+                {data?.DriverId && <div className="flex justify-between pr-4 mt-10">
 
                   <div>
                     <div className="flex flex-col gap-1">
                       <h4 className="text-xl font-bold text-red-500">#{data?.vehicleTypeId ? data?.vehicleTypeId : "N/A"}</h4>
                       <p className="font-medium text-lg text-themeBorderGray">Driver</p>
-                      <p className="text-xl font-bold">{data?.orderDetails?.DriverId?.firstName || data?.orderDetails?.DriverId?.lastName ? `${data?.orderDetails?.DriverId?.firstName} ${data?.orderDetails?.DriverId?.lastName}` : "N/A"}</p>
-                      <Link to={`mailto:${data?.orderDetails?.DriverId?.email}`} className="flex items-center font-medium text-themeBorderGray mt-2"><IoMailOutline className="text-red-500 text-xl font-bold" />&nbsp;
-                        {data?.orderDetails?.DriverId?.email ? data?.orderDetails?.DriverId?.email : "N/A"}
+                      <p className="text-xl font-bold">{data?.DriverId?.firstName || data?.DriverId?.lastName ? `${data?.DriverId?.firstName} ${data?.DriverId?.lastName}` : "N/A"}</p>
+                      <Link to={`mailto:${data?.DriverId?.email}`} className="flex items-center font-medium text-themeBorderGray mt-2"><IoMailOutline className="text-red-500 text-xl font-bold" />&nbsp;
+                        {data?.DriverId?.email ? data?.DriverId?.email : "N/A"}
                       </Link>
                     </div>
-                    <Link to={`tel:${data?.orderDetails?.DriverId?.countryCode} ${data?.orderDetails?.DriverId?.phoneNum}`} className="flex items-center font-medium text-themeBorderGray mt-2"><LuPhone className="text-red-500 text-xl" />&nbsp;
-                      {data?.orderDetails?.DriverId?.countryCode || data?.orderDetails?.DriverId?.phoneNum ? `${data?.orderDetails?.DriverId?.countryCode}  ${data?.orderDetails?.DriverId?.phoneNum}` : "N/A"}
+                    <Link to={`tel:${data?.DriverId?.countryCode} ${data?.DriverId?.phoneNum}`} className="flex items-center font-medium text-themeBorderGray mt-2"><LuPhone className="text-red-500 text-xl" />&nbsp;
+                      {data?.DriverId?.countryCode || data?.DriverId?.phoneNum ? `${data?.DriverId?.countryCode}  ${data?.DriverId?.phoneNum}` : "N/A"}
                     </Link>
                   </div>
                   <div>
@@ -210,10 +214,10 @@ export default function OrderDetails() {
                 <div>
                   <img className="w-32 h-32 rounded-md object-cover" src="/images/user.jpg" alt="image" />
                 </div>
-                <h4 className="mt-5 text-2xl font-bold">{data?.orderDetails?.user?.userName ? data?.orderDetails?.user?.userName : "N/A"}</h4>
+                <h4 className="mt-5 text-2xl font-bold">{data?.user?.userName ? data?.user?.userName : "N/A"}</h4>
                 <p className="my-3 font-medium text-themeBorderGray text-xl">Customer</p>
                 <div className="flex gap-6 mt-4">
-                  <div className="bg-sky-100 text-xl rounded-md p-3 text-red-500 cursor-pointer"><Link to={`tel:${data?.orderDetails?.user?.countryCode}${data?.orderDetails?.user?.phoneNum}`}><FaPhoneVolume /></Link> </div>
+                  <div className="bg-sky-100 text-xl rounded-md p-3 text-red-500 cursor-pointer"><Link to={`tel:${data?.user?.countryCode}${data?.user?.phoneNum}`}><FaPhoneVolume /></Link> </div>
                   <div className="bg-sky-100 text-xl rounded-md p-3 text-red-500 cursor-pointer"><BsFillChatSquareTextFill /></div>
                   <div className="bg-sky-100 text-xl rounded-md p-3 text-red-500 cursor-pointer"><FaLocationDot /></div>
                 </div>

@@ -250,7 +250,7 @@ export default function SideBar() {
         />
         {isDropdownActive("Restaurant Items & Menu") && (
           <>
-            <div className="m-2 relative space-y-1">
+            <div className="mx-3 relative space-y-1">
               <ListItems
                 title="Add On Collections"
                 to="/restaurant/add-on-collections"
@@ -298,7 +298,7 @@ export default function SideBar() {
         />
         {isDropdownActive("Store Items & Menu") && (
           <>
-            <div className="m-2 relative space-y-1">
+            <div className="mx-3 relative space-y-1">
               <ListItems
                 title="Add On Collection"
                 to="/store/add-on-collections"
@@ -344,7 +344,7 @@ export default function SideBar() {
         />
         {isDropdownActive("Restaurant Orders") && (
           <>
-            <div className="m-2 relative space-y-1">
+            <div className="mx-3 relative space-y-1">
               <ListItems
                 title="All Orders"
                 to="/restaurant/all-orders"
@@ -401,7 +401,7 @@ export default function SideBar() {
         />
         {isDropdownActive("Store Orders") && (
           <>
-            <div className="m-2 relative space-y-1">
+            <div className="mx-3 relative space-y-1">
               <ListItems
                 title="All Orders"
                 to="/store/all-orders"
@@ -445,7 +445,7 @@ export default function SideBar() {
         />
         {isDropdownActive("Promotions") && (
           <>
-            <div className="m-2 relative space-y-1">
+            <div className="mx-3 relative space-y-1">
               <ListItems title="Vouchers" to="/vouchers" Icon={PiTicket} />
               <ListItems
                 title="Charges Section"
@@ -477,7 +477,7 @@ export default function SideBar() {
         />
         {isDropdownActive("Earnings") && (
           <>
-            <div className="m-2 relative space-y-1">
+            <div className="mx-3 relative space-y-1">
               <ListItems
                 title="Overall Earnings"
                 to="/overall-earnings"

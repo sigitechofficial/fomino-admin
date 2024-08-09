@@ -7,7 +7,7 @@ export default function ListItems(props) {
 
   return (
     <Link
-      className={`flex gap-x-2 justify-between items-center py-2 lg:py-3 px-2 mx-1 rounded-md duration-200
+      className={`flex gap-x-2 justify-between items-center py-2 lg:py-3 px-2 rounded-md duration-200
         ${
           location === props.to || props.active
             ? "text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 font-medium rounded-lg text-sm  text-center"

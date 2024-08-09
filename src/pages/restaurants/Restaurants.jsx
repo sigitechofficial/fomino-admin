@@ -35,6 +35,7 @@ export default function Restaurants() {
   };
 
   const edit = (resId) => {
+    localStorage.setItem("resId", resId)
     navigate("/edit-restaurant", {
       state: {
         resId: resId,
@@ -117,7 +118,7 @@ export default function Restaurants() {
       city: values?.city,
       ownerName: values?.ownerName,
       operatingTime: values?.operatingTime,
-      joinedAt: values?.joinedAt.split("/").join("--") ,
+      joinedAt: values?.joinedAt.split("/").join("--"),
       status: values?.status ? "Active" : "InActive",
     })
     return datas.push({

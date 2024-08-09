@@ -210,9 +210,12 @@ export default function Voucher() {
   const date = todayDate()
 
   const update = async () => {
-    if (updateVoucher?.from > updateVoucher?.to) {
+    let before = new Date(updateVoucher?.from);
+    let after = new Date(updateVoucher?.to);
+    let tDate = new Date(date)
+    if (before > after) {
       info_toaster("Please Select Correct Date");
-    } else if (updateVoucher?.from < date) {
+    } else if (before < tDate) {
       info_toaster("Can't Select previous Date");
     } else {
       setLoader(true);
@@ -647,7 +650,7 @@ export default function Voucher() {
                         </label>
                         <input
                           value={updateVoucher?.from}
-                          type="date"
+                          type="datetime-local"
                           name="from"
                           id="from"
                           className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"
@@ -664,7 +667,7 @@ export default function Voucher() {
                         </label>
                         <input
                           value={updateVoucher?.to}
-                          type="date"
+                          type="datetime-local"
                           name="to"
                           id="to"
                           className="bg-themeInput w-full h-10 px-3 rounded-md outline-none"

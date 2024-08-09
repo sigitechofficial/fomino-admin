@@ -29,8 +29,9 @@ import { toast } from "react-toastify";
 
 export default function EditRestaurants() {
   const location = useLocation();
+  let resId = localStorage.getItem("resId")
   const { data, reFetch } = GetAPI(
-    `admin/getmetadatarestaurant/${location?.state?.resId}`
+    `admin/getmetadatarestaurant/${resId}`
   );
   console.log(data, "data")
 
@@ -1129,12 +1130,12 @@ export default function EditRestaurants() {
                         return (
                           items?.R_PLinks.map((elem, idx) => {
                             return (
-                              <div className="flex justify-center items-center p-2 rounded-xl  shadow-md gap-4 cursor-pointer">
+                              <div className="flex items-center p-2 rounded-xl  shadow-md gap-4 cursor-pointer">
                                 <img className="w-32 h-32 rounded-2xl object-cover shrink-0" src={`${BASE_URL}${elem?.image}`} alt="menu image" />
                                 <div>
                                   <h4 className="font-semibold text-2xl">{elem?.name}</h4>
-                                  {console.log(elem?.productCollections?.map(itm => itm?.collection?.id, "check data"))}
-                                  {/* <p className="text-gray-500">{elem?.productCollections?.map(itm => itm?.collection?.collectionAddons[0]?.name)}</p> */}
+                              
+                                  <p className="text-gray-500">No AddOns from backend, No AddOns from backend </p>
                                   <h4 className="text-xl font-semibold">{elem.originalPrice ? "CHF" + elem?.originalPrice : "N/A"}</h4>
                                 </div>
                               </div>
